@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/model/item.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
 class NewItemScreen extends StatefulWidget {
@@ -27,7 +30,6 @@ class _NewItemScreenState extends State<NewItemScreen> {
 
   @override
   void dispose() {
-    
     itemName.dispose();
     itemPrice.dispose();
     itemNotes.dispose();
@@ -68,8 +70,18 @@ class _NewItemScreenState extends State<NewItemScreen> {
                 ),
                 child: MainButton(
                   title: "Save item",
-                  onPressed: () {
-                    Get.offAllNamed(AppRoute.homeScreen);
+                  onPressed: () async{
+                    String id = AppConstant.generateRandomId(10);
+                    ItemModel item = ItemModel(
+                        id: id,
+                        name: itemName.text,
+                        notes: itemNotes.text,
+                        price: double.tryParse(itemPrice.text) ?? 0.0,
+                        isTaxable: mainController.isTaxable.value);
+
+                    await BusinessController().addItem("item", id, item.toMap());
+                    Get.offNamed(AppRoute.itemsScreen);
+                    
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -92,9 +104,8 @@ class _NewItemScreenState extends State<NewItemScreen> {
       padding: EdgeInsets.symmetric(
           vertical: AppConstant.getHeight(context) * 0.015, horizontal: 2),
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      
       decoration: BoxDecoration(
-          color: AppConstant.darkAccent,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,8 +115,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context,
-              controller: itemNotes, text: "Notes (optional)"),
+          input(context, controller: itemNotes, text: "Notes (optional)"),
         ],
       ),
     );
@@ -135,7 +145,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
           vertical: AppConstant.getHeight(context) * 0.01, horizontal: 6),
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-          color: AppConstant.darkAccent,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +173,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                 width: AppConstant.getWidth(context) * 0.25,
                 decoration: BoxDecoration(
                     color: mainController.isTaxable.value
-                        ? AppConstant.lightAccent
+                        ? AppTheme.lightAccent
                         : Colors.white,
                     borderRadius: BorderRadius.circular(15)),
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -173,15 +183,17 @@ class _NewItemScreenState extends State<NewItemScreen> {
                   children: [
                     Visibility(
                       visible: mainController.isTaxable.value,
-                      replacement: const Icon(
-                        Icons.add,
-                        color: Colors.grey,
-                      ),
-                      child: const Icon(Icons.check, color: Colors.grey),
+                      replacement: Icon(Icons.add, color: Colors.black),
+                      child: const Icon(Icons.check, color: Colors.white),
                     ),
-                    Text("Taxable",style: TextStyle(color: mainController.isTaxable.value == false
-                        ? Colors.black
-                        : Colors.white,),)
+                    Text(
+                      "Taxable",
+                      style: TextStyle(
+                        color: mainController.isTaxable.value == false
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    )
                   ],
                 ),
               ),

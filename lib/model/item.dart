@@ -2,11 +2,13 @@
 import 'dart:convert';
 
 class ItemModel {
+  final String id;
   final String name;
   final String notes;
   final double price;
   final bool isTaxable;
   ItemModel({
+    required this.id,
     required this.name,
     required this.notes,
     required this.price,
@@ -14,12 +16,14 @@ class ItemModel {
   });
 
   ItemModel copyWith({
+    String? id,
     String? name,
     String? notes,
     double? price,
     bool? isTaxable,
   }) {
     return ItemModel(
+      id: id ?? this.id,
       name: name ?? this.name,
       notes: notes ?? this.notes,
       price: price ?? this.price,
@@ -29,6 +33,7 @@ class ItemModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'name': name,
       'notes': notes,
       'price': price,
@@ -38,6 +43,7 @@ class ItemModel {
 
   factory ItemModel.fromMap(Map<String, dynamic> map) {
     return ItemModel(
+      id: map['id'] as String,
       name: map['name'] as String,
       notes: map['notes'] as String,
       price: map['price'] as double,
@@ -52,7 +58,7 @@ class ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(name: $name, notes: $notes, price: $price, isTaxable: $isTaxable)';
+    return 'ItemModel(id: $id, name: $name, notes: $notes, price: $price, isTaxable: $isTaxable)';
   }
 
   @override
@@ -60,6 +66,7 @@ class ItemModel {
     if (identical(this, other)) return true;
   
     return 
+      other.id == id &&
       other.name == name &&
       other.notes == notes &&
       other.price == price &&
@@ -68,7 +75,8 @@ class ItemModel {
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return id.hashCode ^
+      name.hashCode ^
       notes.hashCode ^
       price.hashCode ^
       isTaxable.hashCode;

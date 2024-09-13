@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 
 class ManageBusinessScreen extends StatefulWidget {
   const ManageBusinessScreen({super.key});
@@ -149,7 +150,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
       width: AppConstant.getWidth(context) * 0.9,
       margin: const EdgeInsets.only(top: 5, bottom: 10),
       decoration: BoxDecoration(
-          color: AppConstant.lightSecondary,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: TextField(
@@ -193,7 +194,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
                   style: TextStyle(fontSize: 15, color: Colors.grey[800]))),
           Container(
             decoration: BoxDecoration(
-                color: AppConstant.lightSecondary, borderRadius: BorderRadius.circular(10)),
+                color: AppTheme.lightSecondary, borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
                 inputC(context, controller: nameController, label: "Your name"),

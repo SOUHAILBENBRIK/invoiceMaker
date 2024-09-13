@@ -9,7 +9,7 @@ import 'package:quick_invoice/utils/theme_app.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await BusinessController().initBox();
+  await BusinessController().initAllBoxes();
   runApp(const MyApp());
 }
 

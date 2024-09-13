@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/icon_parameters.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -27,7 +28,6 @@ class SettingsScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.01,
             ),
-            themeSwitch(context,mainController : mainController),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.01,
             ),
@@ -57,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
             width: AppConstant.getWidth(context) * 0.12,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: AppConstant.lightAccent,
+                color: AppTheme.lightAccent,
                 border: Border.all(color: Colors.black)),
             child: Center(
               child: Text(
@@ -76,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         margin: const EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
-          color: AppConstant.lightSecondary,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
@@ -114,7 +114,7 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         margin: const EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
-          color: AppConstant.lightSecondary,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
@@ -126,37 +126,5 @@ class SettingsScreen extends StatelessWidget {
         ));
   }
 
-  themeSwitch(BuildContext context,{required MainController mainController}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      width: AppConstant.getWidth(context) * 0.9,
-      decoration: BoxDecoration(
-        color: AppConstant.lightSecondary,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-       
-        children: [
-          const SizedBox(width: 5,),
-          const Text("Light Mode"),
-          const Spacer(),
-          Obx(
-          () {
-              return Switch(
-                activeColor: AppConstant.lightAccent,
-                inactiveThumbColor: AppConstant.darkPrimary,
-                inactiveTrackColor: AppConstant.darkPrimary.withOpacity(0.6),
-                onChanged: (value){
-                  mainController.changeTheme(value);
-                },
-                value: mainController.isDark.value,
-              );
-            }
-          ),
-           const SizedBox(width: 5,),
-        ],
-      ),
-    );
-  }
+ 
 }

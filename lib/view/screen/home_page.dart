@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/screen/estimate_page.dart';
 import 'package:quick_invoice/view/screen/invoice_page.dart';
 
@@ -54,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen>
                   overlayColor:
                       const WidgetStatePropertyAll(Colors.transparent),
                   controller: tabController,
-                  dividerColor: AppConstant.darkAccent,
+                  dividerColor: AppTheme.darkAccent,
                   labelColor: Colors.black,
                   labelStyle: const TextStyle(fontWeight: FontWeight.w600),
                   unselectedLabelColor: Colors.grey,

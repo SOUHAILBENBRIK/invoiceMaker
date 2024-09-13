@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
 class EditClientScreen extends StatefulWidget {
@@ -96,7 +97,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          color: AppConstant.darkAccent,
+          color: AppTheme.darkAccent,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class AppTheme {
   // Define light theme colors
   static const Color lightPrimary = Color(0xFFFFFFFF);  // White
@@ -34,7 +35,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
         ),
       ),
-      iconTheme: const IconThemeData(color: lightAccent),
+      iconTheme: const IconThemeData(color: lightSecondary),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderSide: const BorderSide(color: lightAccent, width: 1),
@@ -45,7 +46,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: lightAccent, width: 2),
+          borderSide: const BorderSide(color: darkPrimary, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
         labelStyle: TextStyle(

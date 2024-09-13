@@ -1,22 +1,19 @@
 // ignore_for_file: use_full_hex_values_for_flutter_colors
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:quick_invoice/model/icon_parameters.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 
 class AppConstant {
-    // Light Theme Colors
-  static const Color lightPrimary = Color.fromARGB(255, 255, 255, 255); // White
-  static const Color lightAccent = Color.fromARGB(255, 13, 125, 19);     // Navy Blue (RGB: 0, 51, 102)
-  static const Color lightSecondary = Color.fromARGB(255, 229, 228, 226); // Grayish Blue (RGB: 176, 196, 222)
-  static const Color lightText = Color.fromARGB(255, 0, 0, 0);           // Black
+ 
+  static String generateRandomId(int length) {
+  const String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  Random random = Random();
 
-  // Dark Theme Colors
-  static const Color darkPrimary = Color.fromARGB(255, 14,29,62);         // Black
-  static const Color darkAccent = Color.fromARGB(255, 226, 247, 225);   // Grayish Blue (RGB: 176, 196, 222)
-  static const Color darkSecondary = Color.fromARGB(255, 129, 133, 137);    // Navy Blue (RGB: 0, 51, 102)
-  static const Color darkText = Color.fromARGB(255, 255, 255, 255); 
-
+  return List.generate(length, (index) => chars[random.nextInt(chars.length)]).join('');
+}
   static List<IconParameters> iconsParameters1 = [
     IconParameters(
         icon: Icons.domain,

@@ -62,7 +62,6 @@ class _IntroScreenState extends State<IntroScreen> {
                 controller: name,
                 onChanged: (value) {
                   mainController.onChange(value);
-                  print(mainController.businessName.value);
                 },
                 decoration: const InputDecoration(
                   labelText: 'Business Name',

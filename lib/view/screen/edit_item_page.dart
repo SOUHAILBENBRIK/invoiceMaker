@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
 class NewItemScreen extends StatefulWidget {
@@ -94,7 +95,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       
       decoration: BoxDecoration(
-          color: AppConstant.darkAccent,
+          color: AppTheme.darkAccent,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +136,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
           vertical: AppConstant.getHeight(context) * 0.01, horizontal: 6),
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-          color: AppConstant.darkAccent,
+          color: AppTheme.darkAccent,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +164,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                 width: AppConstant.getWidth(context) * 0.25,
                 decoration: BoxDecoration(
                     color: mainController.isTaxable.value
-                        ? AppConstant.lightAccent
+                        ? AppTheme.lightAccent
                         : Colors.white,
                     borderRadius: BorderRadius.circular(15)),
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
