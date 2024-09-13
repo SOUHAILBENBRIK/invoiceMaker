@@ -4,14 +4,14 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
-class NewClientScreen extends StatefulWidget {
-  const NewClientScreen({super.key});
+class EditClientScreen extends StatefulWidget {
+  const EditClientScreen({super.key});
 
   @override
-  State<NewClientScreen> createState() => _NewClientScreenState();
+  State<EditClientScreen> createState() => _EditClientScreenState();
 }
 
-class _NewClientScreenState extends State<NewClientScreen> {
+class _EditClientScreenState extends State<EditClientScreen> {
   late TextEditingController clientName;
   late TextEditingController phoneNumber;
   late TextEditingController phone;

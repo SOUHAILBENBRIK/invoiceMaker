@@ -4,8 +4,8 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/view/widgets/new_button_widget.dart';
 
-class NewEstimateScreen extends StatelessWidget {
-  const NewEstimateScreen({super.key});
+class EditEstimateScreen extends StatelessWidget {
+  const EditEstimateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

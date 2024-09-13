@@ -1,90 +1,168 @@
 import 'package:flutter/material.dart';
-import 'package:quick_invoice/utils/constants_app.dart';
 
 class AppTheme {
+  // Define light theme colors
+  static const Color lightPrimary = Color(0xFFFFFFFF);  // White
+  static const Color lightAccent = Color(0xFF0d7d13);  // Green
+  static const Color lightSecondary = Color(0xFFE5E4E2); // Light Gray
+  static const Color lightText = Color(0xFF000000);    // Black
+
+  // Define dark theme colors
+  static const Color darkPrimary = Color(0xFF0e1d3e);  // Dark Blue
+  static const Color darkAccent = Color(0xFFE2F7E1);   // Soft Mint
+  static const Color darkSecondary = Color(0xFF818589); // Grayish Blue
+  static const Color darkText = Color(0xFFFFFFFF);     // White
+
+  // Light Theme Configuration
   static ThemeData lightTheme() {
     return ThemeData(
-      scaffoldBackgroundColor: Colors.white,
-      iconTheme: IconThemeData(color: AppConstant.lightSecondary),
+      scaffoldBackgroundColor: lightPrimary,
+      colorScheme: const ColorScheme.light(
+        primary: lightPrimary,
+        secondary: lightAccent,
+        surface: lightSecondary,
+        onPrimary: lightText,
+        onSecondary: lightText,
+        onSurface: lightText,
+      ),
       appBarTheme: const AppBarTheme(
-        iconTheme: IconThemeData(color: Colors.black),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: lightPrimary,
+        iconTheme: IconThemeData(color: lightText),
         titleTextStyle: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+          color: lightText,
           fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
+      iconTheme: const IconThemeData(color: lightAccent),
       inputDecorationTheme: InputDecorationTheme(
-        floatingLabelAlignment: FloatingLabelAlignment.start,
-        floatingLabelStyle: TextStyle(
-          color: Colors.black.withOpacity(0.7),
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
         border: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.green, width: 1),
+          borderSide: const BorderSide(color: lightAccent, width: 1),
           borderRadius: BorderRadius.circular(10),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black, width: 0.3),
+          borderSide: BorderSide(color: lightText.withOpacity(0.3), width: 0.3),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black, width: 2),
+          borderSide: const BorderSide(color: lightAccent, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           fontSize: 14,
-          color: Colors.black,
+          color: lightText.withOpacity(0.7),
         ),
         hintStyle: TextStyle(
           fontSize: 12,
-          color: Colors.black.withOpacity(0.5),
+          color: lightText.withOpacity(0.5),
         ),
       ),
       textTheme: const TextTheme(
-        
         bodySmall: TextStyle(
-          color: Colors.black87,
+          color: lightText,
           fontSize: 12,
-          fontWeight: FontWeight.w400,
         ),
         bodyMedium: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w500,
+          color: lightText,
           fontSize: 16,
         ),
         bodyLarge: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w600,
+          color: lightText,
           fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
         headlineSmall: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+          color: lightText,
           fontSize: 22,
+          fontWeight: FontWeight.bold,
         ),
         headlineMedium: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+          color: lightText,
           fontSize: 26,
+          fontWeight: FontWeight.bold,
         ),
         headlineLarge: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+          color: lightText,
           fontSize: 30,
+          fontWeight: FontWeight.bold,
         ),
-        
       ),
-      buttonTheme: ButtonThemeData(
-        shape: RoundedRectangleBorder(
+    );
+  }
+
+  // Dark Theme Configuration
+  static ThemeData darkTheme() {
+    return ThemeData(
+      scaffoldBackgroundColor: darkPrimary,
+      colorScheme: const ColorScheme.dark(
+        primary: darkPrimary,
+        secondary: darkAccent,
+        surface: darkSecondary,
+        onPrimary: darkText,
+        onSecondary: darkText,
+        onSurface: darkText,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: darkPrimary,
+        iconTheme: IconThemeData(color: darkText),
+        titleTextStyle: TextStyle(
+          color: darkText,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      iconTheme: const IconThemeData(color: darkAccent),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(color: darkAccent, width: 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        buttonColor: Colors.white,
-        textTheme: ButtonTextTheme.primary,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: darkText.withOpacity(0.3), width: 0.3),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: darkAccent, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        labelStyle: TextStyle(
+          fontSize: 14,
+          color: darkText.withOpacity(0.7),
+        ),
+        hintStyle: TextStyle(
+          fontSize: 12,
+          color: darkText.withOpacity(0.5),
+        ),
+      ),
+      textTheme: const TextTheme(
+        bodySmall: TextStyle(
+          color: darkText,
+          fontSize: 12,
+        ),
+        bodyMedium: TextStyle(
+          color: darkText,
+          fontSize: 16,
+        ),
+        bodyLarge: TextStyle(
+          color: darkText,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineSmall: TextStyle(
+          color: darkText,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: TextStyle(
+          color: darkText,
+          fontSize: 26,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineLarge: TextStyle(
+          color: darkText,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

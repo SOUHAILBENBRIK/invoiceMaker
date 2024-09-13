@@ -4,8 +4,8 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/view/widgets/new_button_widget.dart';
 
-class NewEstimateScreen extends StatelessWidget {
-  const NewEstimateScreen({super.key});
+class EditInvoiceScreen extends StatelessWidget {
+  const EditInvoiceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,16 @@ class NewEstimateScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: Column(
           children: [
-            Text("New Estimate", style: Theme.of(context).textTheme.bodyLarge),
+            Text("New Invoice", style: Theme.of(context).textTheme.bodyLarge),
             SizedBox(
-              height: AppConstant.getHeight(context) * 0.03,
+              height: AppConstant.getHeight(context) * 0.02,
+            ),
+            NewButtonWidget(
+                title: "Client",
+                onPressed: () => Get.toNamed(AppRoute.clientScreen),
+                icon: Icons.person_add),
+            SizedBox(
+              height: AppConstant.getHeight(context) * 0.02,
             ),
             NewButtonWidget(
                 title: "Item",
@@ -46,12 +53,9 @@ class NewEstimateScreen extends StatelessWidget {
                     const SizedBox(
                       width: 15,
                     ),
-                    Text(
-                      "Total",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                    ),
+                    const Text("Total",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500)),
                     const Spacer(),
                     GestureDetector(
                       onTap: () => Get.toNamed(AppRoute.currenciesScreen),
@@ -75,9 +79,11 @@ class NewEstimateScreen extends StatelessWidget {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Text("\$0.00",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.normal)),
+                    const Text(
+                      "\$0.00",
+                      style: TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.normal),
+                    ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -85,7 +91,7 @@ class NewEstimateScreen extends StatelessWidget {
                 )),
             const Spacer(),
             const Text(
-              "In Estimate, you need to choose only items",
+              "Choose your Client first",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
             ),
             const SizedBox(

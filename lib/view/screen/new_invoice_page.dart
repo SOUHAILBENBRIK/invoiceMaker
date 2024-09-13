@@ -27,14 +27,14 @@ class NewInvoiceScreen extends StatelessWidget {
             ),
             NewButtonWidget(
                 title: "Client",
-                onPressed: () => print(""),
+                onPressed: () => Get.toNamed(AppRoute.clientScreen),
                 icon: Icons.person_add),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
             NewButtonWidget(
                 title: "Item",
-                onPressed: () => print(""),
+                onPressed: () => Get.toNamed(AppRoute.itemsScreen),
                 icon: Icons.format_list_bulleted_add),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.035,

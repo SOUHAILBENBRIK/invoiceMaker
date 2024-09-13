@@ -27,12 +27,19 @@ class SettingsScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.01,
             ),
+            themeSwitch(context,mainController : mainController),
+            SizedBox(
+              height: AppConstant.getHeight(context) * 0.01,
+            ),
             info(context, list: AppConstant.iconsInfo),
             const Spacer(
               flex: 3,
             ),
-            const Text("Version 1.0.0"),
-            SizedBox(height: 10,)
+            Text("Version 1.0.0",
+                style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),
@@ -43,18 +50,14 @@ class SettingsScreen extends StatelessWidget {
     return SizedBox(
       child: Row(
         children: [
-          Text(name,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.w400, color: Colors.black)),
+          Text(name, style: Theme.of(context).textTheme.headlineSmall),
           const Spacer(),
           Container(
             height: AppConstant.getWidth(context) * 0.12,
             width: AppConstant.getWidth(context) * 0.12,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: AppConstant.lightAccent.withOpacity(0.4),
+                color: AppConstant.lightAccent,
                 border: Border.all(color: Colors.black)),
             child: Center(
               child: Text(
@@ -121,5 +124,39 @@ class SettingsScreen extends StatelessWidget {
             })
           ],
         ));
+  }
+
+  themeSwitch(BuildContext context,{required MainController mainController}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      width: AppConstant.getWidth(context) * 0.9,
+      decoration: BoxDecoration(
+        color: AppConstant.lightSecondary,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+       
+        children: [
+          const SizedBox(width: 5,),
+          const Text("Light Mode"),
+          const Spacer(),
+          Obx(
+          () {
+              return Switch(
+                activeColor: AppConstant.lightAccent,
+                inactiveThumbColor: AppConstant.darkPrimary,
+                inactiveTrackColor: AppConstant.darkPrimary.withOpacity(0.6),
+                onChanged: (value){
+                  mainController.changeTheme(value);
+                },
+                value: mainController.isDark.value,
+              );
+            }
+          ),
+           const SizedBox(width: 5,),
+        ],
+      ),
+    );
   }
 }

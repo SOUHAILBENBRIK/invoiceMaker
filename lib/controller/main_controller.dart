@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
@@ -6,14 +5,14 @@ class MainController extends GetxController {
   RxString businessName = "".obs;
   RxInt homeIndex = 0.obs;
   RxBool isTaxable = false.obs;
+  RxBool isDark = false.obs;
   
 
-  late TextEditingController clientName;
-  late TextEditingController phoneNumber;
-  late TextEditingController email;
-  late TextEditingController address;
+  
 
- 
+  void changeTheme(bool value){
+    isDark.value = value;
+  }
   
 
   void changeIsTaxible() {

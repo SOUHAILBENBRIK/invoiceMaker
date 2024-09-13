@@ -18,11 +18,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainController mainController = Get.put(MainController());
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      getPages: AppRoute.routes,
-      initialRoute: AppRoute.introScreen,
-      theme: AppTheme.lightTheme(),
+    return Obx(
+      () {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          getPages: AppRoute.routes,
+          initialRoute: AppRoute.introScreen,
+          theme: mainController.isDark.value? AppTheme.darkTheme():AppTheme.lightTheme(),
+        );
+      }
     );
   }
 }

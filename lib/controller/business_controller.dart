@@ -17,10 +17,10 @@ class BusinessController {
 
   // Initialize the Hive box
   Future<void> initBox() async {
-    _box = await Hive.openBox('business');  
+    _box = await Hive.openBox('invoice');  
   }
 
-  Future<void> addBusiness(String key, BusinessModel) async {
+  Future<void> addItem<T>(String key, T value) async {
     await _box.put(key, value);
   }
 
@@ -37,6 +37,10 @@ class BusinessController {
   // Delete data from the box
   Future<void> deleteItem(String key) async {
     await _box.delete(key);
+  }
+  //get all items from the box
+  List<dynamic> getAllItems() {
+    return _box.values.toList();
   }
   // Clear all items from the box
   Future<void> clearBox() async {
