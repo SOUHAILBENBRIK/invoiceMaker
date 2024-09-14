@@ -183,7 +183,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                   children: [
                     Visibility(
                       visible: mainController.isTaxable.value,
-                      replacement: Icon(Icons.add, color: Colors.black),
+                      replacement: const Icon(Icons.add, color: Colors.black),
                       child: const Icon(Icons.check, color: Colors.white),
                     ),
                     Text(

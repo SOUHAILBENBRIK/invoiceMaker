@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -18,7 +19,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
   late TextEditingController phone;
   late TextEditingController email;
   late TextEditingController address;
-  
+  final MainController mainController = Get.find<MainController>();
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +29,12 @@ class _EditClientScreenState extends State<EditClientScreen> {
     phone = TextEditingController();
     email = TextEditingController();
     address = TextEditingController();
+    Future.delayed(Duration.zero, () {
+      clientName.text = mainController.currentClient.value?.name??"";
+      phoneNumber.text = mainController.currentClient.value?.phone??"";
+      email.text = mainController.currentClient.value?.email??"";
+      address.text = mainController.currentClient.value?.address??"";
+    });
   }
 
   @override

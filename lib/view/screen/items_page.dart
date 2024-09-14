@@ -115,9 +115,9 @@ class _ItemScreenState extends State<ItemScreen> {
       width: AppConstant.getWidth(context),
       child: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           SearchWidget(controller: searchController),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           Visibility(
             visible: mainController.filteredItems.isNotEmpty,
             replacement: Expanded(
@@ -125,7 +125,7 @@ class _ItemScreenState extends State<ItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Spacer(flex: 2,),
+                    const Spacer(flex: 2,),
                     const Icon(
                       Icons.edit_document,
                       size: 40,
@@ -135,7 +135,7 @@ class _ItemScreenState extends State<ItemScreen> {
                     ),
                     Text("Start by adding an item",
                         style: Theme.of(context).textTheme.bodyMedium!),
-                        Spacer(),
+                        const Spacer(),
                   ],
                 ),
             ),

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           getPages: AppRoute.routes,
-          initialRoute: AppRoute.introScreen,
+          initialRoute: AppRoute.splashScreen,
           theme: mainController.isDark.value? AppTheme.darkTheme():AppTheme.lightTheme(),
         );
       }

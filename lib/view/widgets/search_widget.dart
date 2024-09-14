@@ -15,7 +15,7 @@ class SearchWidget extends StatelessWidget {
     return SizedBox(
       width: AppConstant.getWidth(context)*0.9,
       child: TextField(
-        style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 14),
+        style: const TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 14),
         
         controller: controller,
         onChanged: (value) => mainController.updateSearchTerm(value),

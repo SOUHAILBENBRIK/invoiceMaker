@@ -3,7 +3,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
@@ -82,7 +84,11 @@ class _IntroScreenState extends State<IntroScreen> {
                   visible: mainController.businessName.value.isNotEmpty,
                   child: MainButton(
                       title: "Continue",
-                      onPressed: () {
+                      onPressed: ()async {
+                         Business me =
+                            Business(name:mainController.businessName.value);
+                        await BusinessController()
+                            .addItem("business", "me", me.toMap());
                         Get.offAllNamed(AppRoute.homeScreen);
                       },
                       bg: Colors.black,

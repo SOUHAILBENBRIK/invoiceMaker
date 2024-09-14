@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/icon_parameters.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  final MainController mainController = Get.find<MainController>();
+  
+
+ 
+
+  @override
   Widget build(BuildContext context) {
-    final MainController mainController = Get.find<MainController>();
     return Scaffold(
       appBar: AppBar(
           leading: GestureDetector(
@@ -125,6 +136,4 @@ class SettingsScreen extends StatelessWidget {
           ],
         ));
   }
-
- 
 }

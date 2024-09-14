@@ -35,6 +35,11 @@ class AppTheme {
           fontWeight: FontWeight.bold,
         ),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+          cursorColor: lightSecondary, // Change the cursor color here
+          selectionColor: Colors.black.withOpacity(0.5), // Change the text selection color
+          selectionHandleColor: Colors.black, // Change the selection handle color
+        ),
       iconTheme: const IconThemeData(color: lightSecondary),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(

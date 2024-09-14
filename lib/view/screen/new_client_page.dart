@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -14,7 +16,6 @@ class NewClientScreen extends StatefulWidget {
 
 class _NewClientScreenState extends State<NewClientScreen> {
   late TextEditingController clientName;
-  late TextEditingController phoneNumber;
   late TextEditingController phone;
   late TextEditingController email;
   late TextEditingController address;
@@ -23,7 +24,6 @@ class _NewClientScreenState extends State<NewClientScreen> {
   void initState() {
     super.initState();
     clientName = TextEditingController();
-    phoneNumber = TextEditingController();
     phone = TextEditingController();
     email = TextEditingController();
     address = TextEditingController();
@@ -32,7 +32,6 @@ class _NewClientScreenState extends State<NewClientScreen> {
   @override
   void dispose() {
     clientName.dispose();
-    phoneNumber.dispose();
     email.dispose();
     address.dispose();
     super.dispose();
@@ -70,9 +69,18 @@ class _NewClientScreenState extends State<NewClientScreen> {
                       : AppConstant.getHeight(context) * 0.02,
                 ),
                 child: MainButton(
-                  title: "Continue",
-                  onPressed: () {
-                    Get.offAllNamed(AppRoute.homeScreen);
+                  title: "Save Client",
+                  onPressed: () async {
+                    String id = AppConstant.generateRandomId(10);
+                  ClientModel client = ClientModel(
+                        id: id,
+                        name: clientName.text,
+                        email: email.text,
+                        address: address.text,
+                        phone: phone.text);
+
+                    await BusinessController().addItem("client", id, client.toMap());
+                    Get.offNamed(AppRoute.clientScreen);
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -107,7 +115,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
             width: AppConstant.getWidth(context) * 0.9,
             child: TextField(
               style: const TextStyle(color: Colors.black, fontSize: 14),
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
               controller: clientName,
               decoration: const InputDecoration(
@@ -118,28 +126,29 @@ class _NewClientScreenState extends State<NewClientScreen> {
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: phoneNumber, text: "Phone"),
+          input(context, controller: phone, text: "Phone",type: TextInputType.phone),
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: email, text: "E-mail"),
+          input(context, controller: email, text: "E-mail",type: TextInputType.emailAddress),
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: address, text: "Address"),
+          input(context, controller: address, text: "Address",textAction: TextInputAction.done),
         ],
       ),
     );
   }
 
   Container input(BuildContext context,
-      {required TextEditingController controller, required String text}) {
+      {required TextEditingController controller, required String text, TextInputType type= TextInputType.text,TextInputAction textAction = TextInputAction.next}) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: AppConstant.getWidth(context) * 0.9,
       child: TextField(
         style: const TextStyle(color: Colors.black, fontSize: 14),
-        textInputAction: TextInputAction.done,
+        textInputAction: textAction,
+        keyboardType: type,
         cursorColor: Colors.black,
         controller: controller,
         decoration: InputDecoration(

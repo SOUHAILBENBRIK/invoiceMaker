@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen>
             icon: const Icon(
               Icons.info,
             ),
-            onPressed: () => print("hi"),
+            onPressed: () => debugPrint("hi"),
           ),
           actions: [
             IconButton(

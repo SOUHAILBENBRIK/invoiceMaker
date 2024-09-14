@@ -35,10 +35,18 @@ class MainController extends GetxController {
   //Rx<InvoiceModel?> currentInvoice = null.obs;
   Rx<Business?> currentBusniss = null.obs;
   //Rx<ItemModel?> currentestimes = null.obs;
-  //Rx<ClientModel?> currentClient = null.obs;
- 
+  Rx<ClientModel?> currentClient = null.obs;
+  void onChangeCurrentClient(ClientModel val){
+    currentClient.value = val;
+  }
+  void changeBusniness(Business val){
+    currentBusniss.value = val;
+  }
   void changeItems(List<ItemModel> val){
     items.value = val;
+  }
+  void changeClient(List<ClientModel> val){
+    clients.value = val;
   }
   void changeTheme(bool value) {
     isDark.value = value;

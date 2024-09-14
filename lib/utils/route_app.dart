@@ -1,6 +1,8 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:quick_invoice/view/screen/client_page.dart';
 import 'package:quick_invoice/view/screen/currencies_page.dart';
+import 'package:quick_invoice/view/screen/edit_client_page.dart';
+import 'package:quick_invoice/view/screen/edit_item_page.dart';
 import 'package:quick_invoice/view/screen/estimate_page.dart';
 import 'package:quick_invoice/view/screen/home_page.dart';
 import 'package:quick_invoice/view/screen/intro_page.dart';
@@ -12,9 +14,11 @@ import 'package:quick_invoice/view/screen/new_estimate_page.dart';
 import 'package:quick_invoice/view/screen/new_invoice_page.dart';
 import 'package:quick_invoice/view/screen/new_item_page.dart';
 import 'package:quick_invoice/view/screen/settings_page.dart';
+import 'package:quick_invoice/view/screen/splash_screen.dart';
 
 class AppRoute {
   static String introScreen = "/intro";
+  static String splashScreen = "/splash";
   static String homeScreen = "/home";
   static String newInvoiceScreen = "/newInvoice";
   static String settingsScreen = "/settings";
@@ -27,9 +31,12 @@ class AppRoute {
   static String newEstimateScreen = "/newEstimate";
   static String invoiceScreen = "/invoice";
   static String currenciesScreen = "/currencies";
+  static String editClientScreen = "/editClient";
+  static String editItemScreen = "/editScreen";
 
   static List<GetPage> routes = [
     GetPage(name: introScreen, page: () => const IntroScreen()),
+    GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(name: homeScreen, page: () => const HomeScreen()),
     GetPage(name: newInvoiceScreen, page: () => const NewInvoiceScreen()),
     GetPage(name: clientScreen, page: () => const ClientScreen()),
@@ -42,5 +49,7 @@ class AppRoute {
     GetPage(name: invoiceScreen, page: () => const InvoiceScreen()),
     GetPage(name: currenciesScreen, page: () => const CurrenciesPage()),
     GetPage(name: settingsScreen, page: () => const SettingsScreen()),
+    GetPage(name: editClientScreen, page: () => const EditClientScreen()),
+    GetPage(name: editItemScreen, page: () => const EditItemScreen()),
   ];
 }

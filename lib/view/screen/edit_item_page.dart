@@ -6,14 +6,14 @@ import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
-class NewItemScreen extends StatefulWidget {
-  const NewItemScreen({super.key});
+class EditItemScreen extends StatefulWidget {
+  const EditItemScreen({super.key});
 
   @override
-  State<NewItemScreen> createState() => _NewItemScreenState();
+  State<EditItemScreen> createState() => _EditItemScreenState();
 }
 
-class _NewItemScreenState extends State<NewItemScreen> {
+class _EditItemScreenState extends State<EditItemScreen> {
   final MainController mainController = Get.find();
   late TextEditingController itemName;
   late TextEditingController itemPrice;

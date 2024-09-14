@@ -3,9 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
+import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/main_button.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class ManageBusinessScreen extends StatefulWidget {
   const ManageBusinessScreen({super.key});
@@ -25,12 +30,14 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
   final MainController mainController = Get.find();
   @override
   void initState() {
-    controller = TextEditingController(text: mainController.businessName.value);
-    name = TextEditingController();
-    phone = TextEditingController();
-    email = TextEditingController();
-    address = TextEditingController();
     super.initState();
+    Business? business = Business.fromMap(Map<String, dynamic>.from(
+        BusinessController().getItem("business", "me")));
+    controller = TextEditingController(text: business.name);
+    name = TextEditingController(text: business.userName ?? "");
+    phone = TextEditingController();
+    email = TextEditingController(text: business.email ?? "");
+    address = TextEditingController(text: business.address ?? "");
   }
 
   @override
@@ -45,6 +52,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -72,7 +80,25 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
                   nameController: name,
                   addressController: address,
                   emailController: email,
-                  phoneController: phone)
+                  phoneController: phone),
+              SizedBox(height: AppConstant.getHeight(context) * 0.05),
+              MainButton(
+                title: "Edit",
+                onPressed: () async {
+                  Business business = Business(
+                      name: mainController.businessName.value,
+                      email: email.text,
+                      address: address.text,
+                      userName: name.text,
+                      phone: phone.text);
+                  await BusinessController()
+                      .updateItem("business", "me", business.toMap());
+                  MessageWidget.sucessMessage(
+                      title: "Editing Busniness successfully");
+                },
+                bg: Colors.black,
+                textColor: Colors.white,
+              ),
             ],
           ),
         ),
@@ -187,21 +213,27 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 3,),
+          const SizedBox(
+            height: 3,
+          ),
           Container(
               margin: const EdgeInsets.only(left: 5, bottom: 15),
               child: Text(name,
                   style: TextStyle(fontSize: 15, color: Colors.grey[800]))),
           Container(
             decoration: BoxDecoration(
-                color: AppTheme.lightSecondary, borderRadius: BorderRadius.circular(10)),
+                color: AppTheme.lightSecondary,
+                borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
                 inputC(context, controller: nameController, label: "Your name"),
                 inputC(context, controller: phoneController, label: "Phone"),
                 inputC(context, controller: emailController, label: "E-mail"),
-                inputC(context, controller: addressController, label: "Address"),
-                SizedBox(height: 3,),
+                inputC(context,
+                    controller: addressController, label: "Address"),
+                const SizedBox(
+                  height: 3,
+                ),
               ],
             ),
           )

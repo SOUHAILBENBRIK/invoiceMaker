@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
-import 'package:quick_invoice/model/item.dart';
+import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -17,26 +17,27 @@ class ClientScreen extends StatefulWidget {
 
 class _ClientScreenState extends State<ClientScreen> {
   final MainController mainController = Get.find<MainController>();
-  late TextEditingController searchController ;
+  late TextEditingController searchController;
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
     _loadClients();
   }
+
   @override
-  dispose(){
+  dispose() {
     super.dispose();
     searchController.dispose();
   }
-  
+
   Future<void> _loadClients() async {
     Future.delayed(Duration.zero, () {
-      final items = BusinessController().getAllItems("client");
-      mainController.changeItems(
-        items.map((item) {
+      final clients = BusinessController().getAllItems("client");
+      mainController.changeClient(
+        clients.map((client) {
           // Ensure proper casting to Map<String, dynamic>
-          return ItemModel.fromMap(Map<String, dynamic>.from(item));
+          return ClientModel.fromMap(Map<String, dynamic>.from(client));
         }).toList(),
       );
     });
@@ -56,7 +57,7 @@ class _ClientScreenState extends State<ClientScreen> {
           ),
           centerTitle: true,
           title: Text(
-            'Items',
+            'Clients',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           actions: [
@@ -85,7 +86,7 @@ class _ClientScreenState extends State<ClientScreen> {
         ),
         body: Obx(() {
           return Visibility(
-            visible: mainController.items.isEmpty,
+            visible: mainController.clients.isEmpty,
             replacement: itemListWidget(context),
             child: SizedBox(
               width: AppConstant.getWidth(context),
@@ -93,15 +94,14 @@ class _ClientScreenState extends State<ClientScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  
                   const Icon(
-                    Icons.edit_document,
+                    Icons.person_add_outlined,
                     size: 40,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text("Start by adding an item",
+                  Text("Start by adding an client",
                       style: Theme.of(context).textTheme.bodyMedium!),
                 ],
               ),
@@ -115,49 +115,63 @@ class _ClientScreenState extends State<ClientScreen> {
       width: AppConstant.getWidth(context),
       child: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           SearchWidget(controller: searchController),
-          SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           Visibility(
-            visible: mainController.filteredItems.isNotEmpty,
+            visible: mainController.filteredClient.isNotEmpty,
             replacement: Expanded(
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Spacer(flex: 2,),
-                    const Icon(
-                      Icons.edit_document,
-                      size: 40,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text("Start by adding an client",
-                        style: Theme.of(context).textTheme.bodyMedium!),
-                        Spacer(),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(
+                    flex: 2,
+                  ),
+                  const Icon(
+                    Icons.person_add_outlined,
+                    size: 40,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text("Start by adding an client",
+                      style: Theme.of(context).textTheme.bodyMedium!),
+                  const Spacer(),
+                ],
+              ),
             ),
             child: Expanded(
               child: ListView.builder(
-                  itemCount: mainController.filteredItems.length,
+                  itemCount: mainController.filteredClient.length,
                   itemBuilder: (context, index) {
-                    final item = mainController.filteredItems[index];
-                    return Container(
-                      width: AppConstant.getWidth(context) * 0.9,
-                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: AppTheme.lightSecondary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(item.name),
-                          const Spacer(),
-                          Text(item.price.toString()),
-                        ],
+                    final ClientModel client = mainController.filteredClient[index];
+                    return GestureDetector(
+                      onTap: () {
+                        mainController.onChangeCurrentClient(mainController.filteredClient[index]);
+                        Get.toNamed(AppRoute.editClientScreen);
+                      },
+                      child: Container(
+                        width: AppConstant.getWidth(context) * 0.9,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightSecondary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(client.name),
+                            const Spacer(),
+                            Text(client.email),
+                          ],
+                        ),
                       ),
                     );
                   }),
