@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
   late TextEditingController email;
   late TextEditingController address;
   final ImagePicker picker = ImagePicker();
-  File? image;
+  Uint8List? image;
   final MainController mainController = Get.find();
   @override
   void initState() {
@@ -35,9 +36,10 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
         BusinessController().getItem("business", "me")));
     controller = TextEditingController(text: business.name);
     name = TextEditingController(text: business.userName ?? "");
-    phone = TextEditingController();
+    phone = TextEditingController(text: business.phone ?? "");
     email = TextEditingController(text: business.email ?? "");
     address = TextEditingController(text: business.address ?? "");
+    image = business.image;
   }
 
   @override
@@ -52,7 +54,6 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -85,10 +86,12 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
               MainButton(
                 title: "Edit",
                 onPressed: () async {
+                  Uint8List? bytes = image;
                   Business business = Business(
                       name: mainController.businessName.value,
                       email: email.text,
                       address: address.text,
+                      image: bytes,
                       userName: name.text,
                       phone: phone.text);
                   await BusinessController()
@@ -110,8 +113,9 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
     final XFile? pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
+      Uint8List? bytes = await File(pickedFile.path).readAsBytes();
       setState(() {
-        image = File(pickedFile.path);
+        image = bytes;
       });
     }
   }
@@ -143,9 +147,12 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
                 image != null
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Image.file(
-                          image!,
-                          height: AppConstant.getHeight(context) * 0.1,
+                        child: CircleAvatar(
+                          radius: AppConstant.getHeight(context) * 0.05,
+                          backgroundImage: Image.memory(
+                            image!,
+                            height: AppConstant.getHeight(context) * 0.1,
+                          ).image,
                         ),
                       )
                     : const Icon(
@@ -227,10 +234,18 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
             child: Column(
               children: [
                 inputC(context, controller: nameController, label: "Your name"),
-                inputC(context, controller: phoneController, label: "Phone"),
-                inputC(context, controller: emailController, label: "E-mail"),
                 inputC(context,
-                    controller: addressController, label: "Address"),
+                    controller: phoneController,
+                    label: "Phone",
+                    type: TextInputType.phone),
+                inputC(context,
+                    controller: emailController,
+                    label: "E-mail",
+                    type: TextInputType.emailAddress),
+                inputC(context,
+                    controller: addressController,
+                    label: "Address",
+                    input: TextInputAction.done),
                 const SizedBox(
                   height: 3,
                 ),
@@ -243,13 +258,18 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
   }
 
   inputC(BuildContext context,
-      {required TextEditingController controller, required String label}) {
+      {required TextEditingController controller,
+      required String label,
+      TextInputAction input = TextInputAction.next,
+      TextInputType type = TextInputType.text}) {
     return Container(
       width: AppConstant.getWidth(context) * 0.9,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: TextField(
         cursorColor: Colors.black,
         controller: controller,
+        textInputAction: input,
+        keyboardType: type,
         style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
             contentPadding:

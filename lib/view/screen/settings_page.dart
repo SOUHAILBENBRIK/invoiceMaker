@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
@@ -16,10 +18,17 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final MainController mainController = Get.find<MainController>();
-  
+  Uint8List? image;
 
  
-
+ @override
+  void initState() {
+    super.initState();
+    Business? business = Business.fromMap(Map<String, dynamic>.from(
+        BusinessController().getItem("business", "me")));
+    
+    image = business.image;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,17 +72,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(name, style: Theme.of(context).textTheme.headlineSmall),
           const Spacer(),
-          Container(
-            height: AppConstant.getWidth(context) * 0.12,
-            width: AppConstant.getWidth(context) * 0.12,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppTheme.lightAccent,
-                border: Border.all(color: Colors.black)),
-            child: Center(
-              child: Text(
-                name[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+          Visibility(
+            visible: image == null,
+            replacement: CircleAvatar(backgroundImage: Image.memory(image!).image,radius: 20,),
+            child: Container(
+              height: AppConstant.getWidth(context) * 0.12,
+              width: AppConstant.getWidth(context) * 0.12,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.lightAccent,
+                  border: Border.all(color: Colors.black)),
+              child: Center(
+                child: Text(
+                  name[0].toUpperCase(),
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
             ),
           ),
