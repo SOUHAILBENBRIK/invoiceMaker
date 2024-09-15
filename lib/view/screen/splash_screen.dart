@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () async {
+    Future.delayed(const Duration(seconds: 3), () async {
       var business = BusinessController().getItem("business", "me");
     if(business == null){
       Get.offAllNamed(AppRoute.introScreen);
@@ -37,10 +37,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: AppConstant.getHeight(context),
         width: AppConstant.getWidth(context),
-        child: CircularProgressIndicator(color: Colors.black,),
+        child: const CircularProgressIndicator(color: Colors.black,),
       ),
     );
   }
