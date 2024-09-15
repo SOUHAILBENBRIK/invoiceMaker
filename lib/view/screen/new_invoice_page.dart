@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
+import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/new_button_widget.dart';
 
 class NewInvoiceScreen extends StatelessWidget {
   const NewInvoiceScreen({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
+     final MainController mainController = Get.find<MainController>();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -25,10 +28,20 @@ class NewInvoiceScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
-            NewButtonWidget(
-                title: "Client",
-                onPressed: () => Get.toNamed(AppRoute.clientScreen),
-                icon: Icons.person_add),
+            Obx(
+              () {
+                return Visibility(
+                  visible: mainController.currentClient.value == null,
+                  replacement: checkedName(context,mainController: mainController),
+                  child: NewButtonWidget(
+                      title: "Client",
+                      onPressed: () => Get.toNamed(AppRoute.clientScreen,arguments:{
+                        "invoice":true
+                      }),
+                      icon: Icons.person_add),
+                );
+              }
+            ),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
@@ -101,5 +114,27 @@ class NewInvoiceScreen extends StatelessWidget {
         ),
       ),
     );
+    
+  }
+  Widget checkedName(BuildContext context,{ required MainController mainController}){
+    var client =mainController.currentClient.value;
+    return Container(
+                        width: AppConstant.getWidth(context) * 0.9,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightSecondary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(client?.name??""),
+                            const Spacer(),
+                            Text(client?.email??""),
+                          ],
+                        ),
+                      );
   }
 }

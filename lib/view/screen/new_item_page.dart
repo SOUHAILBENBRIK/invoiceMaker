@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/item_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/item.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
@@ -16,7 +17,7 @@ class NewItemScreen extends StatefulWidget {
 }
 
 class _NewItemScreenState extends State<NewItemScreen> {
-  final MainController mainController = Get.find();
+  final ItemController itemController = Get.find<ItemController>();
   late TextEditingController itemName;
   late TextEditingController itemPrice;
   late TextEditingController itemNotes;
@@ -77,7 +78,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
                         name: itemName.text,
                         notes: itemNotes.text,
                         price: double.tryParse(itemPrice.text) ?? 0.0,
-                        isTaxable: mainController.isTaxable.value);
+                        isTaxable: itemController.isTaxable.value);
 
                     await BusinessController().addItem("item", id, item.toMap());
                     Get.offNamed(AppRoute.itemsScreen);
@@ -167,12 +168,12 @@ class _NewItemScreenState extends State<NewItemScreen> {
           Obx(() {
             return GestureDetector(
               onTap: () {
-                mainController.changeIsTaxible();
+                itemController.changeIsTaxible();
               },
               child: Container(
                 width: AppConstant.getWidth(context) * 0.25,
                 decoration: BoxDecoration(
-                    color: mainController.isTaxable.value
+                    color: itemController.isTaxable.value
                         ? AppTheme.lightAccent
                         : Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -182,14 +183,14 @@ class _NewItemScreenState extends State<NewItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Visibility(
-                      visible: mainController.isTaxable.value,
+                      visible: itemController.isTaxable.value,
                       replacement: const Icon(Icons.add, color: Colors.black),
                       child: const Icon(Icons.check, color: Colors.white),
                     ),
                     Text(
                       "Taxable",
                       style: TextStyle(
-                        color: mainController.isTaxable.value == false
+                        color: itemController.isTaxable.value == false
                             ? Colors.black
                             : Colors.white,
                       ),

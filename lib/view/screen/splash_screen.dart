@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 3), () async {
+    Future.delayed(const Duration(seconds: 1), () async {
       var business = BusinessController().getItem("business", "me");
     if(business == null){
       Get.offAllNamed(AppRoute.introScreen);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/item_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
@@ -14,7 +16,7 @@ class EditItemScreen extends StatefulWidget {
 }
 
 class _EditItemScreenState extends State<EditItemScreen> {
-  final MainController mainController = Get.find();
+  final ItemController itemController = Get.find<ItemController>();
   late TextEditingController itemName;
   late TextEditingController itemPrice;
   late TextEditingController itemNotes;
@@ -24,6 +26,12 @@ class _EditItemScreenState extends State<EditItemScreen> {
     itemName = TextEditingController();
     itemPrice = TextEditingController();
     itemNotes = TextEditingController();
+    Future.delayed(Duration.zero, () {
+      itemName.text = itemController.currentItem.value?.name ?? "";
+      itemPrice.text = itemController.currentItem.value?.price.toString() ?? "";
+      itemNotes.text = itemController.currentItem.value?.notes ?? "";
+      
+    });
   }
 
   @override
@@ -41,7 +49,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("New Item", style: Theme.of(context).textTheme.bodyLarge),
+        title: Text("Edit Item", style: Theme.of(context).textTheme.bodyLarge),
         leading: GestureDetector(
           onTap: () => Get.back(),
           child: const Icon(Icons.close),
@@ -59,6 +67,8 @@ class _EditItemScreenState extends State<EditItemScreen> {
               part2(context),
               SizedBox(height: AppConstant.getHeight(context) * 0.02),
               part1(context),
+              SizedBox(height: AppConstant.getHeight(context)*0.02,),
+              deleteItem(context),
               const Spacer(flex: 4),
               AnimatedPadding(
                 duration: const Duration(milliseconds: 10),
@@ -95,7 +105,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       
       decoration: BoxDecoration(
-          color: AppTheme.darkAccent,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +146,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
           vertical: AppConstant.getHeight(context) * 0.01, horizontal: 6),
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-          color: AppTheme.darkAccent,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,12 +168,12 @@ class _EditItemScreenState extends State<EditItemScreen> {
           Obx(() {
             return GestureDetector(
               onTap: () {
-                mainController.changeIsTaxible();
+                itemController.changeIsTaxible();
               },
               child: Container(
                 width: AppConstant.getWidth(context) * 0.25,
                 decoration: BoxDecoration(
-                    color: mainController.isTaxable.value
+                    color: itemController.isTaxable.value
                         ? AppTheme.lightAccent
                         : Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -173,14 +183,14 @@ class _EditItemScreenState extends State<EditItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Visibility(
-                      visible: mainController.isTaxable.value,
+                      visible: itemController.isTaxable.value,
                       replacement: const Icon(
                         Icons.add,
                         color: Colors.grey,
                       ),
                       child: const Icon(Icons.check, color: Colors.grey),
                     ),
-                    Text("Taxable",style: TextStyle(color: mainController.isTaxable.value == false
+                    Text("Taxable",style: TextStyle(color: itemController.isTaxable.value == false
                         ? Colors.black
                         : Colors.white,),)
                   ],
@@ -189,6 +199,35 @@ class _EditItemScreenState extends State<EditItemScreen> {
             );
           })
         ],
+      ),
+    );
+  }
+  
+  deleteItem(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        BusinessController()
+            .deleteItem('item', itemController.currentItem.value!.id);
+        Get.offAllNamed(AppRoute.itemsScreen);
+      },
+      child: SizedBox(
+        width: AppConstant.getWidth(context) * 0.9,
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.delete_outline,
+              color: Colors.red,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "Delete item",
+              style: TextStyle(color: Colors.red, fontSize: 15),
+            )
+          ],
+        ),
       ),
     );
   }

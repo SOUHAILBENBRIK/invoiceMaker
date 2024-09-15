@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/client_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
@@ -17,6 +18,7 @@ class ClientScreen extends StatefulWidget {
 
 class _ClientScreenState extends State<ClientScreen> {
   final MainController mainController = Get.find<MainController>();
+  final ClientController clientController = Get.find<ClientController>();
   late TextEditingController searchController;
   @override
   void initState() {
@@ -36,7 +38,6 @@ class _ClientScreenState extends State<ClientScreen> {
       final clients = BusinessController().getAllItems("client");
       mainController.changeClient(
         clients.map((client) {
-          // Ensure proper casting to Map<String, dynamic>
           return ClientModel.fromMap(Map<String, dynamic>.from(client));
         }).toList(),
       );
@@ -81,7 +82,11 @@ class _ClientScreenState extends State<ClientScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.toNamed(AppRoute.newClientScreen);
+            var arguments = Get.arguments;
+            bool invoice = arguments['invoice'] as bool;
+            Get.toNamed(AppRoute.newClientScreen,arguments: {
+              'invoice': invoice
+            });
           },
         ),
         body: Obx(() {
@@ -149,11 +154,18 @@ class _ClientScreenState extends State<ClientScreen> {
               child: ListView.builder(
                   itemCount: mainController.filteredClient.length,
                   itemBuilder: (context, index) {
-                    final ClientModel client = mainController.filteredClient[index];
+                    final ClientModel client =
+                        mainController.filteredClient[index];
                     return GestureDetector(
                       onTap: () {
-                        mainController.onChangeCurrentClient(mainController.filteredClient[index]);
-                        Get.toNamed(AppRoute.editClientScreen);
+                        clientController.onChangeCurrentClient(client);
+                        var arguments = Get.arguments;
+                        bool invoice = arguments['invoice'] as bool;
+                        if (invoice) {
+                          Get.back();
+                        } else {
+                          Get.toNamed(AppRoute.editClientScreen);
+                        }
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

@@ -6,7 +6,7 @@ import 'package:quick_invoice/model/item.dart';
 class MainController extends GetxController {
   RxString businessName = "".obs;
   RxInt homeIndex = 0.obs;
-  RxBool isTaxable = false.obs;
+  
   RxBool isDark = false.obs;
   RxList<ItemModel> items = <ItemModel>[].obs;
   RxList<ClientModel> clients = <ClientModel>[].obs;
@@ -31,14 +31,14 @@ class MainController extends GetxController {
 
   RxList invoices = [].obs;
   RxList estimes = [].obs;
-  Rx<ItemModel?> currentItem = null.obs;
+   
   //Rx<InvoiceModel?> currentInvoice = null.obs;
   Rx<Business?> currentBusniss = null.obs;
-  //Rx<ItemModel?> currentestimes = null.obs;
-  Rx<ClientModel?> currentClient = null.obs;
-  void onChangeCurrentClient(ClientModel val){
-    currentClient.value = val;
-  }
+  
+  
+
+
+
   void changeBusniness(Business val){
     currentBusniss.value = val;
   }
@@ -52,9 +52,7 @@ class MainController extends GetxController {
     isDark.value = value;
   }
 
-  void changeIsTaxible() {
-    isTaxable.value = !isTaxable.value;
-  }
+  
 
   void onChange(String value) {
     businessName.value = value;

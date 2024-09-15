@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/client_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -19,7 +20,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
   late TextEditingController phone;
   late TextEditingController email;
   late TextEditingController address;
-  final MainController mainController = Get.find<MainController>();
+  final ClientController clientController = Get.find<ClientController>();
 
   @override
   void initState() {
@@ -30,10 +31,10 @@ class _EditClientScreenState extends State<EditClientScreen> {
     email = TextEditingController();
     address = TextEditingController();
     Future.delayed(Duration.zero, () {
-      clientName.text = mainController.currentClient.value?.name??"";
-      phoneNumber.text = mainController.currentClient.value?.phone??"";
-      email.text = mainController.currentClient.value?.email??"";
-      address.text = mainController.currentClient.value?.address??"";
+      clientName.text = clientController.currentClient.value?.name ?? "";
+      phoneNumber.text = clientController.currentClient.value?.phone ?? "";
+      email.text = clientController.currentClient.value?.email ?? "";
+      address.text = clientController.currentClient.value?.address ?? "";
     });
   }
 
@@ -52,7 +53,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("New Client", style: Theme.of(context).textTheme.bodyLarge),
+        title:
+            Text("Edit Client", style: Theme.of(context).textTheme.bodyLarge),
         leading: GestureDetector(
           onTap: () => Get.back(),
           child: const Icon(Icons.close),
@@ -69,6 +71,10 @@ class _EditClientScreenState extends State<EditClientScreen> {
             children: [
               SizedBox(height: AppConstant.getHeight(context) * 0.02),
               part2(context),
+              SizedBox(
+                height: AppConstant.getHeight(context) * 0.02,
+              ),
+              deleteClient(context),
               const Spacer(flex: 4),
               AnimatedPadding(
                 duration: const Duration(milliseconds: 10),
@@ -78,7 +84,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                       : AppConstant.getHeight(context) * 0.02,
                 ),
                 child: MainButton(
-                  title: "Continue",
+                  title: "Save changes",
                   onPressed: () {
                     Get.offAllNamed(AppRoute.homeScreen);
                   },
@@ -105,7 +111,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          color: AppTheme.darkAccent,
+          color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,6 +158,35 @@ class _EditClientScreenState extends State<EditClientScreen> {
         controller: controller,
         decoration: InputDecoration(
           labelText: text,
+        ),
+      ),
+    );
+  }
+
+  deleteClient(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        BusinessController()
+            .deleteItem('client', clientController.currentClient.value!.id);
+        Get.offAllNamed(AppRoute.clientScreen);
+      },
+      child: SizedBox(
+        width: AppConstant.getWidth(context) * 0.9,
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.delete_outline,
+              color: Colors.red,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "Delete client",
+              style: TextStyle(color: Colors.red, fontSize: 15),
+            )
+          ],
         ),
       ),
     );

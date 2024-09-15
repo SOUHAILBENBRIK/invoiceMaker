@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/item_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/item.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
@@ -17,6 +18,7 @@ class ItemScreen extends StatefulWidget {
 
 class _ItemScreenState extends State<ItemScreen> {
   final MainController mainController = Get.find<MainController>();
+  final ItemController itemController = Get.find<ItemController>();
   late TextEditingController searchController ;
   @override
   void initState() {
@@ -144,20 +146,26 @@ class _ItemScreenState extends State<ItemScreen> {
                   itemCount: mainController.filteredItems.length,
                   itemBuilder: (context, index) {
                     final item = mainController.filteredItems[index];
-                    return Container(
-                      width: AppConstant.getWidth(context) * 0.9,
-                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: AppTheme.lightSecondary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(item.name),
-                          const Spacer(),
-                          Text(item.price.toString()),
-                        ],
+                    return GestureDetector(
+                      onTap: (){
+                        itemController.onChangeCurrentItem(item);
+                        Get.toNamed(AppRoute.editItemScreen);
+                      },
+                      child: Container(
+                        width: AppConstant.getWidth(context) * 0.9,
+                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightSecondary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(item.name),
+                            const Spacer(),
+                            Text(item.price.toString()),
+                          ],
+                        ),
                       ),
                     );
                   }),

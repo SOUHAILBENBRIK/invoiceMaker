@@ -115,7 +115,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   GestureDetector buttonParameter(BuildContext context, IconParameters val) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(val.path);
+        Get.toNamed(val.path,arguments: {
+          "invoice":false
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
