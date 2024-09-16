@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/controller/item_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/item.dart';
@@ -19,6 +20,7 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
   final MainController mainController = Get.find<MainController>();
   final ItemController itemController = Get.find<ItemController>();
+  final InvoiceController invoiceController = Get.find<InvoiceController>();
   late TextEditingController searchController ;
   @override
   void initState() {
@@ -148,8 +150,16 @@ class _ItemScreenState extends State<ItemScreen> {
                     final item = mainController.filteredItems[index];
                     return GestureDetector(
                       onTap: (){
-                        itemController.onChangeCurrentItem(item);
+                        
+                        var arguments = Get.arguments;
+                        bool invoice = arguments['invoice'] as bool;
+                        if(invoice){
+                          invoiceController.onChangeCurrentItem(item);
+                          Get.toNamed(AppRoute.addItemInvoicePage);
+                        }else{
+                          itemController.onChangeCurrentItem(item);
                         Get.toNamed(AppRoute.editItemScreen);
+                        }
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

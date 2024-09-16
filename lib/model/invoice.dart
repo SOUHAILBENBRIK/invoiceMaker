@@ -112,21 +112,37 @@ class InvoiceModel {
 
 class ItemInvoice {
   final String id;
+  final String name;
+  final String notes;
+  final double price;
+  final bool isTaxable;
   final double discount;
   final int count;
   ItemInvoice({
     required this.id,
+    required this.name,
+    required this.notes,
+    required this.price,
+    required this.isTaxable,
     required this.discount,
     required this.count,
   });
 
   ItemInvoice copyWith({
     String? id,
+    String? name,
+    String? notes,
+    double? price,
+    bool? isTaxable,
     double? discount,
     int? count,
   }) {
     return ItemInvoice(
       id: id ?? this.id,
+      name: name ?? this.name,
+      notes: notes ?? this.notes,
+      price: price ?? this.price,
+      isTaxable: isTaxable ?? this.isTaxable,
       discount: discount ?? this.discount,
       count: count ?? this.count,
     );
@@ -135,6 +151,10 @@ class ItemInvoice {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'name': name,
+      'notes': notes,
+      'price': price,
+      'isTaxable': isTaxable,
       'discount': discount,
       'count': count,
     };
@@ -143,6 +163,10 @@ class ItemInvoice {
   factory ItemInvoice.fromMap(Map<String, dynamic> map) {
     return ItemInvoice(
       id: map['id'] as String,
+      name: map['name'] as String,
+      notes: map['notes'] as String,
+      price: map['price'] as double,
+      isTaxable: map['isTaxable'] as bool,
       discount: map['discount'] as double,
       count: map['count'] as int,
     );
@@ -154,16 +178,32 @@ class ItemInvoice {
       ItemInvoice.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'ItemInvoice(id: $id, discount: $discount, count: $count)';
+  String toString() {
+    return 'ItemInvoice(id: $id, name: $name, notes: $notes, price: $price, isTaxable: $isTaxable, discount: $discount, count: $count)';
+  }
 
   @override
   bool operator ==(covariant ItemInvoice other) {
     if (identical(this, other)) return true;
-
-    return other.id == id && other.discount == discount && other.count == count;
+  
+    return 
+      other.id == id &&
+      other.name == name &&
+      other.notes == notes &&
+      other.price == price &&
+      other.isTaxable == isTaxable &&
+      other.discount == discount &&
+      other.count == count;
   }
 
   @override
-  int get hashCode => id.hashCode ^ discount.hashCode ^ count.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+      name.hashCode ^
+      notes.hashCode ^
+      price.hashCode ^
+      isTaxable.hashCode ^
+      discount.hashCode ^
+      count.hashCode;
+  }
 }

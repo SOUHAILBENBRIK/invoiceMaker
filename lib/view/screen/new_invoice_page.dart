@@ -8,10 +8,10 @@ import 'package:quick_invoice/view/widgets/new_button_widget.dart';
 
 class NewInvoiceScreen extends StatelessWidget {
   const NewInvoiceScreen({super.key});
- 
+
   @override
   Widget build(BuildContext context) {
-     final InvoiceController invoiceController = Get.find<InvoiceController>();
+    final InvoiceController invoiceController = Get.find<InvoiceController>();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -28,27 +28,33 @@ class NewInvoiceScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
-            Obx(
-              () {
-                return Visibility(
-                  visible: invoiceController.currentClient.value == null,
-                  replacement: checkedName(context,mainController: invoiceController),
-                  child: NewButtonWidget(
-                      title: "Client",
-                      onPressed: () => Get.toNamed(AppRoute.clientScreen,arguments:{
-                        "invoice":true
-                      }),
-                      icon: Icons.person_add),
-                );
-              }
-            ),
+            Obx(() {
+              return Visibility(
+                visible: invoiceController.currentClient.value == null,
+                replacement:
+                    checkedName(context, mainController: invoiceController),
+                child: NewButtonWidget(
+                    title: "Client",
+                    onPressed: () => Get.toNamed(AppRoute.clientScreen,
+                        arguments: {"invoice": true}),
+                    icon: Icons.person_add),
+              );
+            }),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
-            NewButtonWidget(
-                title: "Item",
-                onPressed: () => Get.toNamed(AppRoute.itemsScreen),
-                icon: Icons.format_list_bulleted_add),
+            Obx(() {
+              return Visibility(
+                visible: invoiceController.items.isEmpty,
+                replacement: _listOfItem(context),
+                child: NewButtonWidget(
+                    title: "Item",
+                    onPressed: () => Get.toNamed(AppRoute.itemsScreen,arguments : {
+                      "invoice": true,
+                    }),
+                    icon: Icons.format_list_bulleted_add),
+              );
+            }),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.035,
             ),
@@ -114,27 +120,42 @@ class NewInvoiceScreen extends StatelessWidget {
         ),
       ),
     );
-    
   }
-  Widget checkedName(BuildContext context,{ required InvoiceController mainController}){
-    var client =mainController.currentClient.value;
+
+  Widget checkedName(BuildContext context,
+      {required InvoiceController mainController}) {
+    var client = mainController.currentClient.value;
     return Container(
-                        width: AppConstant.getWidth(context) * 0.9,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 15),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 20),
-                        decoration: BoxDecoration(
-                          color: AppTheme.lightSecondary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(client?.name??""),
-                            const Spacer(),
-                            Text(client?.email??""),
-                          ],
-                        ),
-                      );
+      width: AppConstant.getWidth(context) * 0.9,
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.lightSecondary,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Text(client?.name ?? ""),
+          const Spacer(),
+          Text(client?.email ?? ""),
+        ],
+      ),
+    );
+  }
+
+  _listOfItem(BuildContext context) {
+    return Container(
+      height: AppConstant.getHeight(context)*0.2,
+      decoration: BoxDecoration(
+        color: AppTheme.lightSecondary,
+        borderRadius: BorderRadius.circular(10)
+      ),
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context,index){
+        return ListTile(title: Text("Item 1"));
+      }),
+
+    );
   }
 }

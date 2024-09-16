@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/client_controller.dart';
+import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
@@ -18,6 +19,7 @@ class ClientScreen extends StatefulWidget {
 
 class _ClientScreenState extends State<ClientScreen> {
   final MainController mainController = Get.find<MainController>();
+  final InvoiceController invoiceController = Get.find<InvoiceController>();
   final ClientController clientController = Get.find<ClientController>();
   late TextEditingController searchController;
   @override
@@ -84,9 +86,8 @@ class _ClientScreenState extends State<ClientScreen> {
           onPressed: () {
             var arguments = Get.arguments;
             bool invoice = arguments['invoice'] as bool;
-            Get.toNamed(AppRoute.newClientScreen,arguments: {
-              'invoice': invoice
-            });
+            Get.toNamed(AppRoute.newClientScreen,
+                arguments: {'invoice': invoice});
           },
         ),
         body: Obx(() {
@@ -158,12 +159,13 @@ class _ClientScreenState extends State<ClientScreen> {
                         mainController.filteredClient[index];
                     return GestureDetector(
                       onTap: () {
-                        clientController.onChangeCurrentClient(client);
                         var arguments = Get.arguments;
                         bool invoice = arguments['invoice'] as bool;
                         if (invoice) {
+                          invoiceController.onChangeCurrentClient(client);
                           Get.back();
                         } else {
+                          clientController.onChangeCurrentClient(client);
                           Get.toNamed(AppRoute.editClientScreen);
                         }
                       },

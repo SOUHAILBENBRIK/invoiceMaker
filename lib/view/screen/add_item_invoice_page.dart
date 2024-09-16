@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
-import 'package:quick_invoice/controller/item_controller.dart';
-import 'package:quick_invoice/model/item.dart';
+import 'package:quick_invoice/controller/invoice_controller.dart';
+import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 
-class EditItemScreen extends StatefulWidget {
-  const EditItemScreen({super.key});
+class AddItemInvoicePage extends StatefulWidget {
+  const AddItemInvoicePage({super.key});
 
   @override
-  State<EditItemScreen> createState() => _EditItemScreenState();
+  State<AddItemInvoicePage> createState() => _AddItemInvoicePageState();
 }
 
-class _EditItemScreenState extends State<EditItemScreen> {
-  final ItemController itemController = Get.find<ItemController>();
+class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
+  final InvoiceController invoiceController = Get.find<InvoiceController>();
   late TextEditingController itemName;
   late TextEditingController itemPrice;
   late TextEditingController itemNotes;
+  late TextEditingController itemQuantity;
   @override
   void initState() {
     super.initState();
     itemName = TextEditingController();
     itemPrice = TextEditingController();
     itemNotes = TextEditingController();
+    itemQuantity = TextEditingController();
     Future.delayed(Duration.zero, () {
-      itemName.text = itemController.currentItem.value?.name ?? "";
-      itemPrice.text = itemController.currentItem.value?.price.toString() ?? "";
-      itemNotes.text = itemController.currentItem.value?.notes ?? "";
-      
+      itemName.text = invoiceController.currentItem.value?.name ?? "";
+      itemPrice.text =
+          invoiceController.currentItem.value?.price.toString() ?? "";
+      itemNotes.text = invoiceController.currentItem.value?.notes ?? "";
+      itemQuantity.text = "1";
     });
   }
 
   @override
   void dispose() {
-    
     itemName.dispose();
     itemPrice.dispose();
     itemNotes.dispose();
+    itemQuantity.dispose();
     super.dispose();
   }
 
@@ -67,7 +70,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
               part2(context),
               SizedBox(height: AppConstant.getHeight(context) * 0.02),
               part1(context),
-              SizedBox(height: AppConstant.getHeight(context)*0.02,),
+              SizedBox(
+                height: AppConstant.getHeight(context) * 0.02,
+              ),
               deleteItem(context),
               const Spacer(flex: 4),
               AnimatedPadding(
@@ -78,18 +83,20 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       : AppConstant.getHeight(context) * 0.02,
                 ),
                 child: MainButton(
-                  title: "Save item",
-                  onPressed: () async{
-                    
-                    ItemModel item = ItemModel(
-                        id: itemController.currentItem.value?.id??"",
+                  title: "Add item",
+                  onPressed: () async {
+                    String id = AppConstant.generateRandomId(10);
+                    ItemInvoice item = ItemInvoice(
+                        id: id,
                         name: itemName.text,
                         notes: itemNotes.text,
                         price: double.tryParse(itemPrice.text) ?? 0.0,
-                        isTaxable: itemController.isTaxable.value);
+                        isTaxable: invoiceController.isTaxable.value,
+                        discount: 10,
+                        count: int.tryParse(itemQuantity.text) ?? 0);
 
-                    await BusinessController().updateItem("item", itemController.currentItem.value?.id??"", item.toMap());
-                    Get.offNamed(AppRoute.itemsScreen);
+                    invoiceController.onAddItems(item);
+                    Get.offAllNamed(AppRoute.newInvoiceScreen);
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -112,7 +119,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
       padding: EdgeInsets.symmetric(
           vertical: AppConstant.getHeight(context) * 0.015, horizontal: 2),
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      
       decoration: BoxDecoration(
           color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
@@ -124,8 +130,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context,
-              controller: itemNotes, text: "Notes (optional)"),
+          input(context, controller: itemNotes, text: "Notes (optional)"),
         ],
       ),
     );
@@ -174,15 +179,29 @@ class _EditItemScreenState extends State<EditItemScreen> {
               ),
             ),
           ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            width: AppConstant.getWidth(context) * 0.9,
+            child: TextField(
+              style: const TextStyle(color: Colors.black, fontSize: 14),
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.number,
+              cursorColor: Colors.black,
+              controller: itemQuantity,
+              decoration: const InputDecoration(
+                labelText: 'Quantity',
+              ),
+            ),
+          ),
           Obx(() {
             return GestureDetector(
               onTap: () {
-                itemController.changeIsTaxible();
+                invoiceController.changeIsTaxible();
               },
               child: Container(
                 width: AppConstant.getWidth(context) * 0.25,
                 decoration: BoxDecoration(
-                    color: itemController.isTaxable.value
+                    color: invoiceController.isTaxable.value
                         ? AppTheme.lightAccent
                         : Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -192,16 +211,21 @@ class _EditItemScreenState extends State<EditItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Visibility(
-                      visible: itemController.isTaxable.value,
+                      visible: invoiceController.isTaxable.value,
                       replacement: const Icon(
                         Icons.add,
                         color: Colors.grey,
                       ),
                       child: const Icon(Icons.check, color: Colors.grey),
                     ),
-                    Text("Taxable",style: TextStyle(color: itemController.isTaxable.value == false
-                        ? Colors.black
-                        : Colors.white,),)
+                    Text(
+                      "Taxable",
+                      style: TextStyle(
+                        color: invoiceController.isTaxable.value == false
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -211,12 +235,12 @@ class _EditItemScreenState extends State<EditItemScreen> {
       ),
     );
   }
-  
+
   deleteItem(BuildContext context) {
     return GestureDetector(
       onTap: () {
         BusinessController()
-            .deleteItem('item', itemController.currentItem.value!.id);
+            .deleteItem('item', invoiceController.currentItem.value!.id);
         Get.offAllNamed(AppRoute.itemsScreen);
       },
       child: SizedBox(

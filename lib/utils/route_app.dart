@@ -1,4 +1,5 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:quick_invoice/view/screen/add_item_invoice_page.dart';
 import 'package:quick_invoice/view/screen/client_page.dart';
 import 'package:quick_invoice/view/screen/currencies_page.dart';
 import 'package:quick_invoice/view/screen/edit_client_page.dart';
@@ -33,6 +34,7 @@ class AppRoute {
   static String currenciesScreen = "/currencies";
   static String editClientScreen = "/editClient";
   static String editItemScreen = "/editScreen";
+  static String addItemInvoicePage = "/addItemInvoicePage";
 
   static List<GetPage> routes = [
     GetPage(name: introScreen, page: () => const IntroScreen()),
@@ -51,5 +53,6 @@ class AppRoute {
     GetPage(name: settingsScreen, page: () => const SettingsScreen()),
     GetPage(name: editClientScreen, page: () => const EditClientScreen()),
     GetPage(name: editItemScreen, page: () => const EditItemScreen()),
+    GetPage(name: addItemInvoicePage, page: () => const AddItemInvoicePage()),
   ];
 }
