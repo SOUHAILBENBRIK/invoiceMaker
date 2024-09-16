@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
+import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -28,6 +29,7 @@ class NewInvoiceScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
+            _topPart(context, controller: invoiceController),
             Obx(() {
               return Visibility(
                 visible: invoiceController.currentClient.value == null,
@@ -46,12 +48,14 @@ class NewInvoiceScreen extends StatelessWidget {
             Obx(() {
               return Visibility(
                 visible: invoiceController.items.isEmpty,
-                replacement: _listOfItem(context),
+                replacement:
+                    _listOfItem(context, controller: invoiceController),
                 child: NewButtonWidget(
                     title: "Item",
-                    onPressed: () => Get.toNamed(AppRoute.itemsScreen,arguments : {
-                      "invoice": true,
-                    }),
+                    onPressed: () =>
+                        Get.toNamed(AppRoute.itemsScreen, arguments: {
+                          "invoice": true,
+                        }),
                     icon: Icons.format_list_bulleted_add),
               );
             }),
@@ -143,19 +147,110 @@ class NewInvoiceScreen extends StatelessWidget {
     );
   }
 
-  _listOfItem(BuildContext context) {
-    return Container(
-      height: AppConstant.getHeight(context)*0.2,
-      decoration: BoxDecoration(
-        color: AppTheme.lightSecondary,
-        borderRadius: BorderRadius.circular(10)
+  _listOfItem(BuildContext context, {required InvoiceController controller}) {
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: AppConstant.getWidth(context) * 0.9,
+            height: AppConstant.getHeight(context) * 0.3,
+            decoration: BoxDecoration(
+                color: AppTheme.lightSecondary,
+                borderRadius: BorderRadius.circular(10)),
+            child: ListView.builder(
+                itemCount: controller.items.length,
+                itemBuilder: (context, index) {
+                  ItemInvoice item = controller.items[index];
+                  return Container(
+                    width: AppConstant.getWidth(context) * 0.9,
+                    padding: const EdgeInsets.all(3),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(color: Colors.black),
+                    )),
+                    child: ListTile(
+                        title: Text(
+                          item.name,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        trailing: Text(item.price.toString()),
+                        subtitle: Text(
+                          item.count.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        )),
+                  );
+                }),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(AppRoute.itemsScreen, arguments: {
+                "invoice": true,
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              alignment: Alignment.topLeft,
+              width: AppConstant.getWidth(context) * 0.4,
+              decoration: BoxDecoration(
+                  border: Border.all(),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Center(child: Text("Add new item")),
+            ),
+          )
+        ],
       ),
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context,index){
-        return ListTile(title: Text("Item 1"));
-      }),
+    );
+  }
 
+  _topPart(BuildContext context, {required InvoiceController controller}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      width: AppConstant.getWidth(context),
+      
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          
+          _iconButton(context, controller,
+              text: "No duo date", icon: Icons.date_range),
+             
+          _iconButton(context, controller,
+              text: "Issued date", icon: Icons.date_range),
+              
+          _iconButton(context, controller,
+              text: "002", icon: Icons.inventory_outlined),
+           
+        ],
+      ),
+    );
+  }
+
+  _iconButton(BuildContext context, InvoiceController controller,
+      {required String text, required IconData icon}) {
+    return Container(
+      width: AppConstant.getWidth(context) * 0.3,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.black,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall,
+          )
+        ],
+      ),
     );
   }
 }
