@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -11,7 +11,7 @@ class NewInvoiceScreen extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-     final MainController mainController = Get.find<MainController>();
+     final InvoiceController invoiceController = Get.find<InvoiceController>();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -31,8 +31,8 @@ class NewInvoiceScreen extends StatelessWidget {
             Obx(
               () {
                 return Visibility(
-                  visible: mainController.currentClient.value == null,
-                  replacement: checkedName(context,mainController: mainController),
+                  visible: invoiceController.currentClient.value == null,
+                  replacement: checkedName(context,mainController: invoiceController),
                   child: NewButtonWidget(
                       title: "Client",
                       onPressed: () => Get.toNamed(AppRoute.clientScreen,arguments:{
@@ -116,7 +116,7 @@ class NewInvoiceScreen extends StatelessWidget {
     );
     
   }
-  Widget checkedName(BuildContext context,{ required MainController mainController}){
+  Widget checkedName(BuildContext context,{ required InvoiceController mainController}){
     var client =mainController.currentClient.value;
     return Container(
                         width: AppConstant.getWidth(context) * 0.9,
