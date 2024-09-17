@@ -29,7 +29,12 @@ class NewInvoiceScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
-            _topPart(context, controller: invoiceController),
+            Obx(() {
+              return Visibility(
+                visible: invoiceController.items.isNotEmpty && invoiceController.currentClient.value != null,
+                child: _topPart(context, controller: invoiceController),
+              );
+            }),
             Obx(() {
               return Visibility(
                 visible: invoiceController.currentClient.value == null,
@@ -174,7 +179,16 @@ class NewInvoiceScreen extends StatelessWidget {
                           item.name,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                        trailing: Text(item.price.toString()),
+                        trailing: SizedBox(
+                          width: AppConstant.getWidth(context)*0.2,
+                          child: Row(
+                            children: [
+                              Text(item.price.toString()),
+                              Spacer(),
+                              Icon(Icons.delete,color: Colors.redAccent,)
+                            ],
+                          ),
+                        ),
                         subtitle: Text(
                           item.count.toString(),
                           style: Theme.of(context).textTheme.bodySmall,
@@ -209,23 +223,18 @@ class NewInvoiceScreen extends StatelessWidget {
 
   _topPart(BuildContext context, {required InvoiceController controller}) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 10),
       width: AppConstant.getWidth(context),
-      
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          
           _iconButton(context, controller,
               text: "No duo date", icon: Icons.date_range),
-             
           _iconButton(context, controller,
               text: "Issued date", icon: Icons.date_range),
-              
           _iconButton(context, controller,
               text: "002", icon: Icons.inventory_outlined),
-           
         ],
       ),
     );
