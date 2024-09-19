@@ -1,3 +1,4 @@
+import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
@@ -31,7 +32,8 @@ class NewInvoiceScreen extends StatelessWidget {
             ),
             Obx(() {
               return Visibility(
-                visible: invoiceController.items.isNotEmpty && invoiceController.currentClient.value != null,
+                visible: invoiceController.items.isNotEmpty &&
+                    invoiceController.currentClient.value != null,
                 child: _topPart(context, controller: invoiceController),
               );
             }),
@@ -180,12 +182,19 @@ class NewInvoiceScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         trailing: SizedBox(
-                          width: AppConstant.getWidth(context)*0.2,
+                          width: AppConstant.getWidth(context) * 0.2,
                           child: Row(
                             children: [
                               Text(item.price.toString()),
                               Spacer(),
-                              Icon(Icons.delete,color: Colors.redAccent,)
+                              GestureDetector(
+                                  onTap: () {
+                                    controller.onDeleteItems(item);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
+                                  ))
                             ],
                           ),
                         ),
@@ -229,10 +238,79 @@ class NewInvoiceScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _iconButton(context, controller,
-              text: "No duo date", icon: Icons.date_range),
-          _iconButton(context, controller,
-              text: "Issued date", icon: Icons.date_range),
+          GestureDetector(
+            onTap: () async{
+              final today = DateTime.now();
+              final date = await showDatePickerDialog(
+                context: context,
+                initialDate: DateTime(today.year, today.month, today.day),
+                minDate: DateTime(2020, 1, 1),
+                maxDate: DateTime(today.year + 2, today.month, today.day),
+                width: AppConstant.getWidth(context) * 0.9,
+                height: AppConstant.getHeight(context) * 0.4,
+                currentDate: DateTime(today.year, today.month, today.day),
+                selectedDate: DateTime(today.year, today.month, today.day),
+                currentDateDecoration: const BoxDecoration(),
+                currentDateTextStyle: const TextStyle(),
+                daysOfTheWeekTextStyle: const TextStyle(),
+                disabledCellsTextStyle: const TextStyle(),
+                enabledCellsDecoration: const BoxDecoration(),
+                enabledCellsTextStyle: const TextStyle(),
+                initialPickerType: PickerType.days,
+                selectedCellDecoration: const BoxDecoration(),
+                selectedCellTextStyle: const TextStyle(),
+                leadingDateTextStyle: const TextStyle(),
+                slidersColor: Colors.black,
+                highlightColor: Colors.black.withOpacity(0.3),
+                slidersSize: 20,
+                splashColor: Colors.black.withOpacity(0.3),
+                splashRadius: 40,
+                centerLeadingDate: true,
+              );
+              if(date != null){
+                controller.addDuoDate(date);
+              }
+            },
+            
+            child: _iconButton(context, controller,
+                text: "No duo date", icon: Icons.date_range,date : controller.duoDate.value),
+          ),
+          GestureDetector(
+            onTap: () async {
+              final today = DateTime.now();
+              final date = await showDatePickerDialog(
+                context: context,
+                initialDate: DateTime(today.year, today.month, today.day),
+                minDate: DateTime(2020, 1, 1),
+                maxDate: DateTime(today.year + 2, today.month, today.day),
+                width: AppConstant.getWidth(context) * 0.9,
+                height: AppConstant.getHeight(context) * 0.4,
+                currentDate: DateTime(today.year, today.month, today.day),
+                selectedDate: DateTime(today.year, today.month, today.day),
+                currentDateDecoration: const BoxDecoration(),
+                currentDateTextStyle: const TextStyle(),
+                daysOfTheWeekTextStyle: const TextStyle(),
+                disabledCellsTextStyle: const TextStyle(),
+                enabledCellsDecoration: const BoxDecoration(),
+                enabledCellsTextStyle: const TextStyle(),
+                initialPickerType: PickerType.days,
+                selectedCellDecoration: const BoxDecoration(),
+                selectedCellTextStyle: const TextStyle(),
+                leadingDateTextStyle: const TextStyle(),
+                slidersColor: Colors.black,
+                highlightColor: Colors.black.withOpacity(0.3),
+                slidersSize: 20,
+                splashColor: Colors.black.withOpacity(0.3),
+                splashRadius: 40,
+                centerLeadingDate: true,
+              );
+              if(date != null){
+                controller.addIssuedDate(date);
+              }
+            },
+            child: _iconButton(context, controller,
+                text: "Issued date", icon: Icons.date_range,date:controller.issuedDate.value),
+          ),
           _iconButton(context, controller,
               text: "002", icon: Icons.inventory_outlined),
         ],
@@ -241,7 +319,7 @@ class NewInvoiceScreen extends StatelessWidget {
   }
 
   _iconButton(BuildContext context, InvoiceController controller,
-      {required String text, required IconData icon}) {
+      {required String text, required IconData icon,DateTime? date,String? textCase}) {
     return Container(
       width: AppConstant.getWidth(context) * 0.3,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -251,13 +329,29 @@ class NewInvoiceScreen extends StatelessWidget {
             icon,
             color: Colors.black,
           ),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
-          Text(
+          Visibility(
+            visible: date !=null,
+            child:Text(
+            "${date?.month}/${date?.day}/${date?.year}",
+            style: Theme.of(context).textTheme.bodySmall,
+          ) ,
+            ),
+             Visibility(
+            visible: textCase !=null,
+            child:Text(
+            textCase??"",
+            style: Theme.of(context).textTheme.bodySmall,
+          ) ,
+            ),
+            Visibility(
+              visible: textCase == null && date==null,
+              child: Text(
             text,
             style: Theme.of(context).textTheme.bodySmall,
-          )
+          ))
         ],
       ),
     );
