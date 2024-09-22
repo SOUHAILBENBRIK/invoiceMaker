@@ -74,14 +74,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Spacer(),
           Visibility(
             visible: image == null,
-            replacement: CircleAvatar(backgroundImage: Image.memory(image!).image,radius: 20,),
+            replacement: image != null ? CircleAvatar(backgroundImage: Image.memory(image!).image,radius: 20,) : const SizedBox(),
             child: Container(
               height: AppConstant.getWidth(context) * 0.12,
               width: AppConstant.getWidth(context) * 0.12,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: AppTheme.lightAccent,
-                  border: Border.all(color: Colors.black)),
+                  color: AppTheme.lightAccent.withOpacity(0.6),
+                  ),
               child: Center(
                 child: Text(
                   name[0].toUpperCase(),

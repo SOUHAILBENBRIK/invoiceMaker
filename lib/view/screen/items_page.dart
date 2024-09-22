@@ -21,19 +21,20 @@ class _ItemScreenState extends State<ItemScreen> {
   final MainController mainController = Get.find<MainController>();
   final ItemController itemController = Get.find<ItemController>();
   final InvoiceController invoiceController = Get.find<InvoiceController>();
-  late TextEditingController searchController ;
+  late TextEditingController searchController;
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
     _loadItems();
   }
+
   @override
-  dispose(){
+  dispose() {
     super.dispose();
     searchController.dispose();
   }
-  
+
   Future<void> _loadItems() async {
     Future.delayed(Duration.zero, () {
       final items = BusinessController().getAllItems("item");
@@ -66,7 +67,9 @@ class _ItemScreenState extends State<ItemScreen> {
           actions: [
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoute.newItemScreen);
+                Get.toNamed(AppRoute.newItemScreen, arguments: {
+                  "invoice": true,
+                });
               },
               child: const Icon(
                 Icons.add,
@@ -84,7 +87,9 @@ class _ItemScreenState extends State<ItemScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.toNamed(AppRoute.newItemScreen);
+            Get.toNamed(AppRoute.newItemScreen, arguments: {
+              "invoice": true,
+            });
           },
         ),
         body: Obx(() {
@@ -97,7 +102,6 @@ class _ItemScreenState extends State<ItemScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  
                   const Icon(
                     Icons.edit_document,
                     size: 40,
@@ -119,29 +123,35 @@ class _ItemScreenState extends State<ItemScreen> {
       width: AppConstant.getWidth(context),
       child: Column(
         children: [
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           SearchWidget(controller: searchController),
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           Visibility(
             visible: mainController.filteredItems.isNotEmpty,
             replacement: Expanded(
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(flex: 2,),
-                    const Icon(
-                      Icons.edit_document,
-                      size: 40,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text("Start by adding an item",
-                        style: Theme.of(context).textTheme.bodyMedium!),
-                        const Spacer(),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(
+                    flex: 2,
+                  ),
+                  const Icon(
+                    Icons.edit_document,
+                    size: 40,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text("Start by adding an item",
+                      style: Theme.of(context).textTheme.bodyMedium!),
+                  const Spacer(),
+                ],
+              ),
             ),
             child: Expanded(
               child: ListView.builder(
@@ -149,22 +159,23 @@ class _ItemScreenState extends State<ItemScreen> {
                   itemBuilder: (context, index) {
                     final item = mainController.filteredItems[index];
                     return GestureDetector(
-                      onTap: (){
-                        
+                      onTap: () {
                         var arguments = Get.arguments;
                         bool invoice = arguments['invoice'] as bool;
-                        if(invoice){
+                        if (invoice) {
                           invoiceController.onChangeCurrentItem(item);
                           Get.toNamed(AppRoute.addItemInvoicePage);
-                        }else{
+                        } else {
                           itemController.onChangeCurrentItem(item);
-                        Get.toNamed(AppRoute.editItemScreen);
+                          Get.toNamed(AppRoute.editItemScreen);
                         }
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,
-                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 20),
                         decoration: BoxDecoration(
                           color: AppTheme.lightSecondary,
                           borderRadius: BorderRadius.circular(10),

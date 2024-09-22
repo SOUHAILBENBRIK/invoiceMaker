@@ -94,7 +94,8 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
                         isTaxable: invoiceController.isTaxable.value,
                         discount: 10,
                         count: int.tryParse(itemQuantity.text) ?? 0);
-
+                    invoiceController.changeTotal(
+                        number: item.count, price: item.price);
                     invoiceController.onAddItems(item);
                     Get.offAllNamed(AppRoute.newInvoiceScreen);
                   },

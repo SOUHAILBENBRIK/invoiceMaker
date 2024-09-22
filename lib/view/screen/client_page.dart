@@ -163,7 +163,7 @@ class _ClientScreenState extends State<ClientScreen> {
                         bool invoice = arguments['invoice'] as bool;
                         if (invoice) {
                           invoiceController.onChangeCurrentClient(client);
-                          Get.back();
+                          Get.toNamed(AppRoute.newInvoiceScreen);
                         } else {
                           clientController.onChangeCurrentClient(client);
                           Get.toNamed(AppRoute.editClientScreen);

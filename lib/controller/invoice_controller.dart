@@ -10,14 +10,28 @@ class InvoiceController extends GetxController {
   Rx<DateTime?> duoDate = Rx<DateTime?>(null);
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
   RxDouble total = 0.0.obs;
-  RxDouble discount = 0.0.obs;
-  
+  RxInt discount = 0.obs;
+  RxString invoiceName = "001".obs;
 
   RxBool isTaxable = false.obs;
   Rx<ItemModel?> currentItem = Rx<ItemModel?>(null);
 
   void changeIsTaxible() {
     isTaxable.value = !isTaxable.value;
+  }
+
+  void changeInvoiceName (String val){
+    invoiceName.value = val;
+  }
+
+  void changeTotal({required int number, required double price}) {
+    total.value = total.value + number * price;
+    total.value = total.value - (discount / 100) * total.value;
+  }
+
+  void changeDiscount(int value) {
+    discount.value = value;
+    total.value = total.value - discount / 100 * total.value;
   }
 
   void addDuoDate(DateTime val) {

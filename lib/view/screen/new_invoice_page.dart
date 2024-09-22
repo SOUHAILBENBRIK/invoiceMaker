@@ -1,23 +1,41 @@
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/bottom_widget.dart';
+import 'package:quick_invoice/view/widgets/main_button.dart';
 import 'package:quick_invoice/view/widgets/new_button_widget.dart';
 
-class NewInvoiceScreen extends StatelessWidget {
+class NewInvoiceScreen extends StatefulWidget {
   const NewInvoiceScreen({super.key});
 
   @override
+  State<NewInvoiceScreen> createState() => _NewInvoiceScreenState();
+}
+
+class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
+  final InvoiceController invoiceController = Get.find<InvoiceController>();
+  @override
+  void initState() {
+    final invoice = BusinessController().getAllItems("invoice");
+    invoiceController.changeInvoiceName("0" + invoice.length.toString());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final InvoiceController invoiceController = Get.find<InvoiceController>();
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () {
+            Get.toNamed(AppRoute.homeScreen);
+            invoiceController.restForm();
+          },
           child: const Icon(Icons.close),
         ),
       ),
@@ -69,68 +87,88 @@ class NewInvoiceScreen extends StatelessWidget {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.035,
             ),
-            Container(
-                width: AppConstant.getWidth(context) * 0.9,
-                height: AppConstant.getHeight(context) * 0.07,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    const Text("Total",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500)),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(AppRoute.currenciesScreen),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Row(
-                          children: [
-                            Text(
-                              "TND",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.normal),
-                            ),
-                            Icon(Icons.arrow_drop_down)
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      "\$0.00",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.normal),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                )),
+            discount(context, invoiceController),
+            SizedBox(
+              height: AppConstant.getHeight(context) * 0.01,
+            ),
+            total(context, invoiceController),
             const Spacer(),
             const Text(
-              "Choose your Client first",
+              "Best solution to creating invoices",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
             ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: AppConstant.getHeight(context) * 0.01,
+            ),
+            Visibility(
+                visible: invoiceController.currentClient.value != null &&
+                    invoiceController.items.isNotEmpty &&
+                    invoiceController.duoDate.value != null,
+                child: MainButton(
+                    title: "Add invoice",
+                    onPressed: () {},
+                    bg: Colors.black,
+                    textColor: Colors.white)),
+            SizedBox(
+              height: AppConstant.getHeight(context) * 0.01,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Container total(BuildContext context, InvoiceController invoiceController) {
+    return Container(
+        width: AppConstant.getWidth(context) * 0.9,
+        height: AppConstant.getHeight(context) * 0.07,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 15,
+            ),
+            const Text("Total",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+            const Spacer(),
+            GestureDetector(
+              onTap: () => Get.toNamed(AppRoute.currenciesScreen),
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Row(
+                  children: [
+                    Text(
+                      "TND",
+                      style: TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.normal),
+                    ),
+                    Icon(Icons.arrow_drop_down)
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Obx(() {
+              return Text(
+                "${invoiceController.total.value}",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+              );
+            }),
+            const SizedBox(
+              width: 10,
+            ),
+          ],
+        ));
   }
 
   Widget checkedName(BuildContext context,
@@ -186,12 +224,15 @@ class NewInvoiceScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(item.price.toString()),
-                              Spacer(),
+                              const Spacer(),
                               GestureDetector(
                                   onTap: () {
                                     controller.onDeleteItems(item);
+                                    controller.changeTotal(
+                                        number: item.count,
+                                        price: item.price * -1);
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.delete,
                                     color: Colors.redAccent,
                                   ))
@@ -232,14 +273,14 @@ class NewInvoiceScreen extends StatelessWidget {
 
   _topPart(BuildContext context, {required InvoiceController controller}) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       width: AppConstant.getWidth(context),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               final today = DateTime.now();
               final date = await showDatePickerDialog(
                 context: context,
@@ -267,13 +308,14 @@ class NewInvoiceScreen extends StatelessWidget {
                 splashRadius: 40,
                 centerLeadingDate: true,
               );
-              if(date != null){
+              if (date != null) {
                 controller.addDuoDate(date);
               }
             },
-            
             child: _iconButton(context, controller,
-                text: "No duo date", icon: Icons.date_range,date : controller.duoDate.value),
+                text: "No duo date",
+                icon: Icons.date_range,
+                date: controller.duoDate.value),
           ),
           GestureDetector(
             onTap: () async {
@@ -304,22 +346,27 @@ class NewInvoiceScreen extends StatelessWidget {
                 splashRadius: 40,
                 centerLeadingDate: true,
               );
-              if(date != null){
+              if (date != null) {
                 controller.addIssuedDate(date);
               }
             },
             child: _iconButton(context, controller,
-                text: "Issued date", icon: Icons.date_range,date:controller.issuedDate.value),
+                text: "Issued date",
+                icon: Icons.date_range,
+                date: controller.issuedDate.value),
           ),
           _iconButton(context, controller,
-              text: "002", icon: Icons.inventory_outlined),
+              text: invoiceController.invoiceName.value, icon: Icons.inventory_outlined),
         ],
       ),
     );
   }
 
   _iconButton(BuildContext context, InvoiceController controller,
-      {required String text, required IconData icon,DateTime? date,String? textCase}) {
+      {required String text,
+      required IconData icon,
+      DateTime? date,
+      String? textCase}) {
     return Container(
       width: AppConstant.getWidth(context) * 0.3,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -333,27 +380,63 @@ class NewInvoiceScreen extends StatelessWidget {
             width: 5,
           ),
           Visibility(
-            visible: date !=null,
-            child:Text(
-            "${date?.month}/${date?.day}/${date?.year}",
-            style: Theme.of(context).textTheme.bodySmall,
-          ) ,
+            visible: date != null,
+            child: Text(
+              "${date?.month}/${date?.day}/${date?.year}",
+              style: Theme.of(context).textTheme.bodySmall,
             ),
-             Visibility(
-            visible: textCase !=null,
-            child:Text(
-            textCase??"",
-            style: Theme.of(context).textTheme.bodySmall,
-          ) ,
+          ),
+          Visibility(
+            visible: textCase != null,
+            child: Text(
+              textCase ?? "",
+              style: Theme.of(context).textTheme.bodySmall,
             ),
-            Visibility(
-              visible: textCase == null && date==null,
+          ),
+          Visibility(
+              visible: textCase == null && date == null,
               child: Text(
-            text,
-            style: Theme.of(context).textTheme.bodySmall,
-          ))
+                text,
+                style: Theme.of(context).textTheme.bodySmall,
+              ))
         ],
       ),
+    );
+  }
+
+  discount(BuildContext context, InvoiceController invoiceController) {
+    return GestureDetector(
+      onTap: () {
+        Get.bottomSheet(DiscountPage());
+      },
+      child: Container(
+          width: AppConstant.getWidth(context) * 0.9,
+          height: AppConstant.getHeight(context) * 0.07,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 15,
+              ),
+              const Text("Discount",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+              const Spacer(),
+              Obx(() {
+                return Text(
+                  "${invoiceController.discount.value}%",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                );
+              }),
+              const SizedBox(
+                width: 20,
+              ),
+            ],
+          )),
     );
   }
 }

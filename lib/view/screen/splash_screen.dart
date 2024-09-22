@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -40,7 +41,24 @@ class _SplashScreenState extends State<SplashScreen> {
       body: SizedBox(
         height: AppConstant.getHeight(context),
         width: AppConstant.getWidth(context),
-        child: const CircularProgressIndicator(color: Colors.black,),
+        child: Column(
+          children: [
+            Spacer(),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10)
+              ),
+              width: AppConstant.getWidth(context)*0.5,
+              height: AppConstant.getHeight(context)*0.5,
+              child: SvgPicture.asset("assets/leading.svg")),
+            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(color: Colors.black,)),
+              Spacer(),
+          ],
+        ),
       ),
     );
   }

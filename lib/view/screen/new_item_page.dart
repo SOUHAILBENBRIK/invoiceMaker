@@ -80,7 +80,9 @@ class _NewItemScreenState extends State<NewItemScreen> {
                         isTaxable: itemController.isTaxable.value);
 
                     await BusinessController().addItem("item", id, item.toMap());
-                    Get.offNamed(AppRoute.itemsScreen);
+                    Get.offNamed(AppRoute.itemsScreen, arguments: {
+                          "invoice": true,
+                        });
                     
                   },
                   bg: Colors.black,
