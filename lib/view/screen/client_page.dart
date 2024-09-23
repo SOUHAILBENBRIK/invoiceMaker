@@ -52,7 +52,15 @@ class _ClientScreenState extends State<ClientScreen> {
         appBar: AppBar(
           leading: GestureDetector(
             onTap: () {
-              Get.back();
+              var arguments = Get.arguments;
+              int state = arguments['state'] as int;
+              if (state == 0) {
+                Get.offAllNamed(AppRoute.settingsScreen);
+
+              }else if ( state ==1){
+                Get.offAllNamed(AppRoute.invoiceScreen);
+              }
+              
             },
             child: const Icon(
               Icons.arrow_back,
@@ -66,7 +74,10 @@ class _ClientScreenState extends State<ClientScreen> {
           actions: [
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoute.newClientScreen);
+                var arguments = Get.arguments;
+            int state = arguments['state'];
+            Get.toNamed(AppRoute.newClientScreen,
+                arguments: {'state': state});
               },
               child: const Icon(
                 Icons.add,

@@ -8,9 +8,9 @@ import 'package:quick_invoice/model/invoice.dart';
 
 class EstimateModel {
   final String id;
-  final String invoiceNumber;
-  final String invoiceDate;
-  final String invoiceDue;
+  final String estimateNumber;
+  final String estimateDate;
+  final String estimateDue;
   final double total;
   final String note;
   final int discount;
@@ -18,9 +18,9 @@ class EstimateModel {
   final CountryCurrency currency;
   EstimateModel({
     required this.id,
-    required this.invoiceNumber,
-    required this.invoiceDate,
-    required this.invoiceDue,
+    required this.estimateNumber,
+    required this.estimateDate,
+    required this.estimateDue,
     required this.total,
     required this.note,
     required this.discount,
@@ -30,9 +30,9 @@ class EstimateModel {
 
   EstimateModel copyWith({
     String? id,
-    String? invoiceNumber,
-    String? invoiceDate,
-    String? invoiceDue,
+    String? estimateNumber,
+    String? estimateDate,
+    String? estimateDue,
     double? total,
     String? note,
     int? discount,
@@ -41,9 +41,9 @@ class EstimateModel {
   }) {
     return EstimateModel(
       id: id ?? this.id,
-      invoiceNumber: invoiceNumber ?? this.invoiceNumber,
-      invoiceDate: invoiceDate ?? this.invoiceDate,
-      invoiceDue: invoiceDue ?? this.invoiceDue,
+      estimateNumber: estimateNumber ?? this.estimateNumber,
+      estimateDate: estimateDate ?? this.estimateDate,
+      estimateDue: estimateDue ?? this.estimateDue,
       total: total ?? this.total,
       note: note ?? this.note,
       discount: discount ?? this.discount,
@@ -55,9 +55,9 @@ class EstimateModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'invoiceNumber': invoiceNumber,
-      'invoiceDate': invoiceDate,
-      'invoiceDue': invoiceDue,
+      'estimateNumber': estimateNumber,
+      'estimateDate': estimateDate,
+      'estimateDue': estimateDue,
       'total': total,
       'note': note,
       'discount': discount,
@@ -69,9 +69,9 @@ class EstimateModel {
   factory EstimateModel.fromMap(Map<String, dynamic> map) {
     return EstimateModel(
       id: map['id'] as String,
-      invoiceNumber: map['invoiceNumber'] as String,
-      invoiceDate: map['invoiceDate'] as String,
-      invoiceDue: map['invoiceDue'] as String,
+      estimateNumber: map['estimateNumber'] as String,
+      estimateDate: map['estimateDate'] as String,
+      estimateDue: map['estimateDue'] as String,
       total: map['total'] as double,
       note: map['note'] as String,
       discount: map['discount'] as int,
@@ -92,7 +92,7 @@ class EstimateModel {
 
   @override
   String toString() {
-    return 'EstimateModel(id: $id, invoiceNumber: $invoiceNumber, invoiceDate: $invoiceDate, invoiceDue: $invoiceDue, total: $total, note: $note, discount: $discount, items: $items, currency: $currency)';
+    return 'EstimateModel(id: $id, estimateNumber: $estimateNumber, estimateDate: $estimateDate, estimateDue: $estimateDue, total: $total, note: $note, discount: $discount, items: $items, currency: $currency)';
   }
 
   @override
@@ -100,9 +100,9 @@ class EstimateModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.invoiceNumber == invoiceNumber &&
-        other.invoiceDate == invoiceDate &&
-        other.invoiceDue == invoiceDue &&
+        other.estimateNumber == estimateNumber &&
+        other.estimateDate == estimateDate &&
+        other.estimateDue == estimateDue &&
         other.total == total &&
         other.note == note &&
         other.discount == discount &&
@@ -113,9 +113,9 @@ class EstimateModel {
   @override
   int get hashCode {
     return id.hashCode ^
-        invoiceNumber.hashCode ^
-        invoiceDate.hashCode ^
-        invoiceDue.hashCode ^
+        estimateNumber.hashCode ^
+        estimateDate.hashCode ^
+        estimateDue.hashCode ^
         total.hashCode ^
         note.hashCode ^
         discount.hashCode ^

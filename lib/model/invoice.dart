@@ -74,20 +74,22 @@ class InvoiceModel {
   factory InvoiceModel.fromMap(Map<String, dynamic> map) {
     return InvoiceModel(
       id: map['id'] as String,
-      clientName: ClientModel.fromMap(map['clientName'] as Map<String,dynamic>),
+      clientName: ClientModel.fromMap(Map<String, dynamic>.from(map['clientName'] as Map)),
       invoiceNumber: map['invoiceNumber'] as String,
       invoiceDate: map['invoiceDate'] as String,
       invoiceDue: map['invoiceDue'] as String,
       total: map['total'] as double,
       note: map['note'] as String,
       discount: map['discount'] as int,
-      currency: CountryCurrency.fromMap(map['currency'] as Map<String,dynamic>),
-      items: map['items'] != null 
-      ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
-          // Convert each item to Map<String, dynamic>
-          return ItemInvoice.fromMap(Map<String, dynamic>.from(item as Map));
-        }).toList() 
-      : [],
+      currency:
+          CountryCurrency.fromMap(map['currency'] as Map<String, dynamic>),
+      items: map['items'] != null
+          ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
+              // Convert each item to Map<String, dynamic>
+              return ItemInvoice.fromMap(
+                  Map<String, dynamic>.from(item as Map));
+            }).toList()
+          : [],
     );
   }
 
@@ -104,32 +106,31 @@ class InvoiceModel {
   @override
   bool operator ==(covariant InvoiceModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.clientName == clientName &&
-      other.invoiceNumber == invoiceNumber &&
-      other.invoiceDate == invoiceDate &&
-      other.invoiceDue == invoiceDue &&
-      other.total == total &&
-      other.note == note &&
-      other.discount == discount &&
-      other.currency == currency &&
-      listEquals(other.items, items);
+
+    return other.id == id &&
+        other.clientName == clientName &&
+        other.invoiceNumber == invoiceNumber &&
+        other.invoiceDate == invoiceDate &&
+        other.invoiceDue == invoiceDue &&
+        other.total == total &&
+        other.note == note &&
+        other.discount == discount &&
+        other.currency == currency &&
+        listEquals(other.items, items);
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      clientName.hashCode ^
-      invoiceNumber.hashCode ^
-      invoiceDate.hashCode ^
-      invoiceDue.hashCode ^
-      total.hashCode ^
-      note.hashCode ^
-      discount.hashCode ^
-      currency.hashCode ^
-      items.hashCode;
+        clientName.hashCode ^
+        invoiceNumber.hashCode ^
+        invoiceDate.hashCode ^
+        invoiceDue.hashCode ^
+        total.hashCode ^
+        note.hashCode ^
+        discount.hashCode ^
+        currency.hashCode ^
+        items.hashCode;
   }
 }
 

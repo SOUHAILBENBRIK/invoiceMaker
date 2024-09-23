@@ -55,7 +55,17 @@ class _ItemScreenState extends State<ItemScreen> {
         appBar: AppBar(
           leading: GestureDetector(
             onTap: () {
-              Get.back();
+              var arguments = Get.arguments;
+              int state = arguments['state'] as int;
+              if (state == 0) {
+                Get.offAllNamed(AppRoute.settingsScreen);
+
+              }else if ( state ==1){
+                Get.offAllNamed(AppRoute.invoiceScreen);
+              }
+              else{
+                Get.offAllNamed(AppRoute.estimateScreen);
+              }
             },
             child: const Icon(
               Icons.arrow_back,
@@ -69,9 +79,10 @@ class _ItemScreenState extends State<ItemScreen> {
           actions: [
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoute.newItemScreen, arguments: {
-                  "state": 1, //new invoice
-                });
+                var arguments = Get.arguments;
+                int state = arguments['state'];
+                Get.toNamed(AppRoute.newItemScreen,
+                    arguments: {'state': state});
               },
               child: const Icon(
                 Icons.add,
@@ -91,6 +102,7 @@ class _ItemScreenState extends State<ItemScreen> {
           onPressed: () {
             var arguments = Get.arguments;
             int state = arguments['state'];
+            print(state);
             Get.toNamed(AppRoute.newItemScreen, arguments: {'state': state});
           },
         ),
@@ -164,25 +176,23 @@ class _ItemScreenState extends State<ItemScreen> {
                       onTap: () {
                         var arguments = Get.arguments;
                         int state = arguments['state'] as int;
+                        print(state);
                         switch (state) {
                           case 1:
                             invoiceController.onChangeCurrentItem(item);
-                            Get.toNamed(AppRoute.addItemInvoicePage,arguments: {
-                              "state":1
-                            });
+                            Get.toNamed(AppRoute.addItemInvoicePage,
+                                arguments: {"state": 1});
                             break;
                           case 2:
                             estimateController.onChangeCurrentItem(item);
-                            Get.toNamed(AppRoute.addItemInvoicePage,arguments: {
-                              "state":2
-                            });
+                            Get.toNamed(AppRoute.addItemInvoicePage,
+                                arguments: {"state": 2});
                             break;
                           default:
                             itemController.onChangeCurrentItem(item);
                             Get.toNamed(AppRoute.editItemScreen);
                             break;
                         }
-                        
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

@@ -101,15 +101,15 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
                       title: "Add estimate",
                       onPressed: () async {
                         String id = AppConstant.generateRandomId(10);
-                        EstimateModel invoice = EstimateModel(
+                        EstimateModel estimate = EstimateModel(
                             id: id,
                             currency: mainController.currentCountryCurrency.value!,
-                            invoiceNumber: estimateController.estimateName.value,
+                            estimateNumber: estimateController.estimateName.value,
                             discount: estimateController.discount.value,
-                            invoiceDate: estimateController.issuedDate.value
+                            estimateDate: estimateController.issuedDate.value
                                     ?.toIso8601String() ??
                                 "",
-                            invoiceDue: estimateController.duoDate.value
+                            estimateDue: estimateController.duoDate.value
                                     ?.toIso8601String() ??
                                 "",
                             total: estimateController.total.value,
@@ -117,7 +117,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
                             items: estimateController.items);
 
                         await BusinessController()
-                            .addItem("invoice", id, invoice.toMap());
+                            .addItem("estimate", id, estimate.toMap());
                         Get.offNamed(AppRoute.homeScreen);
                       },
                       bg: Colors.black,

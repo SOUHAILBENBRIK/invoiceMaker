@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/estimate_controller.dart';
 import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/model/currency.dart';
+import 'package:quick_invoice/model/estimate.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/model/item.dart';
 
@@ -13,6 +15,7 @@ class MainController extends GetxController {
   RxList<ItemModel> items = <ItemModel>[].obs;
   RxList<ClientModel> clients = <ClientModel>[].obs;
   RxList<InvoiceModel> invoices = <InvoiceModel>[].obs;
+  RxList<EstimateModel> estimates = <EstimateModel>[].obs;
   RxList<CountryCurrency> currencies = <CountryCurrency>[].obs;
   final searchTerm = ''.obs;
   void onChangeCurrentCountryCurrency(CountryCurrency country){
@@ -34,6 +37,9 @@ class MainController extends GetxController {
    List<InvoiceModel> get filteredInvoice {
     return filterList(invoices, (invoice) => invoice.invoiceNumber);
   }
+  List<EstimateModel> get filteredEstimate {
+    return filterList(estimates, (estimate) => estimate.estimateNumber);
+  }
     List<CountryCurrency> get filteredCountryCurrency {
     return filterList(currencies, (currency) => currency.abbreviation);
   }
@@ -43,7 +49,7 @@ class MainController extends GetxController {
   }
 
   
-  RxList estimes = [].obs;
+
   Rx<Business?> currentBusniss = null.obs;
   
   
@@ -58,6 +64,9 @@ class MainController extends GetxController {
   }
   void changeInvoices(List<InvoiceModel> val){
     invoices.value = val;
+  }
+   void changeEstimate(List<EstimateModel> val){
+    estimates.value = val;
   }
   void changeClient(List<ClientModel> val){
     clients.value = val;

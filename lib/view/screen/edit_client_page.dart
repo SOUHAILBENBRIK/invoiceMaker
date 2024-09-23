@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/client_controller.dart';
+import 'package:quick_invoice/model/client.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
@@ -85,8 +86,17 @@ class _EditClientScreenState extends State<EditClientScreen> {
                 ),
                 child: MainButton(
                   title: "Save changes",
-                  onPressed: () {
-                    Get.offAllNamed(AppRoute.homeScreen);
+                  onPressed: () async {
+                    ClientModel client = ClientModel(
+                        id: clientController.currentClient.value?.id??"",
+                        name: clientController.currentClient.value?.name??"",
+                        phone: clientController.currentClient.value?.phone??"",
+                        email: clientController.currentClient.value?.email??"",
+                        address: clientController.currentClient.value?.address??"",);
+                   
+
+                    await BusinessController().updateItem("client", clientController.currentClient.value?.id??"", client.toMap());
+                    Get.offNamed(AppRoute.clientScreen);
                   },
                   bg: Colors.black,
                   textColor: Colors.white,

@@ -72,6 +72,8 @@ class _NewItemScreenState extends State<NewItemScreen> {
                   title: "Save item",
                   onPressed: () async{
                     String id = AppConstant.generateRandomId(10);
+                     var arguments = Get.arguments;
+                        int state = arguments['state'] as int;
                     ItemModel item = ItemModel(
                         id: id,
                         name: itemName.text,
@@ -81,7 +83,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
 
                     await BusinessController().addItem("item", id, item.toMap());
                     Get.offNamed(AppRoute.itemsScreen, arguments: {
-                          "state": 1,
+                          "state": state,
                         });
                     
                   },
