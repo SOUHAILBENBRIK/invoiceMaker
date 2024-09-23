@@ -448,7 +448,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
   discount(BuildContext context, InvoiceController invoiceController) {
     return GestureDetector(
       onTap: () {
-        Get.bottomSheet(const DiscountPage());
+        Get.bottomSheet(const DiscountPage(state: 1,));
       },
       child: Container(
           width: AppConstant.getWidth(context) * 0.9,

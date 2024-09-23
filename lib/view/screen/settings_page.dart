@@ -7,6 +7,7 @@ import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/icon_parameters.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
+import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
           leading: GestureDetector(
         child: const Icon(Icons.close),
-        onTap: () => Get.back(),
+        onTap: () => Get.offAllNamed(AppRoute.homeScreen),
       )),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

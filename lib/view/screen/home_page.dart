@@ -21,6 +21,10 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero,(){
+      final MainController mainController = Get.find<MainController>();
+      mainController.resetSearch();
+    });
     tabController = TabController(length: 2, vsync: this);
   }
 

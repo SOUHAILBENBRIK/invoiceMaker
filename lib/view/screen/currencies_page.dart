@@ -36,6 +36,7 @@ class _CurrenciesPageState extends State<CurrenciesPage> {
   @override
   void dispose() {
     controller.dispose();
+    mainController.resetSearch();
     super.dispose();
   }
 
@@ -45,7 +46,10 @@ class _CurrenciesPageState extends State<CurrenciesPage> {
       appBar: AppBar(
         centerTitle: true,
         leading: GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () {
+            Get.back();
+            mainController.resetSearch();
+          },
           child: const Icon(
             Icons.arrow_back,
           ),

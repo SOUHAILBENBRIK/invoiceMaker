@@ -417,7 +417,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
   discount(BuildContext context, EstimateController estimateController) {
     return GestureDetector(
       onTap: () {
-        Get.bottomSheet(const DiscountPage());
+        Get.bottomSheet(const DiscountPage(state: 2,));
       },
       child: Container(
           width: AppConstant.getWidth(context) * 0.9,

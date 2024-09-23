@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/estimate_controller.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class DiscountPage extends StatefulWidget {
-  const DiscountPage({super.key});
+  const DiscountPage({super.key ,  required this.state});
+  final int state;
 
   @override
   State<DiscountPage> createState() => _DiscountPageState();
@@ -15,10 +17,18 @@ class DiscountPage extends StatefulWidget {
 class _DiscountPageState extends State<DiscountPage> {
   late TextEditingController discount;
   final InvoiceController invoiceController = Get.find<InvoiceController>();
+  final EstimateController estimateController = Get.find<EstimateController>();
   @override
   void initState() {
     super.initState();
-    discount = TextEditingController(text: invoiceController.discount.toString());
+    if (widget.state == 1){
+      discount =
+        TextEditingController(text: invoiceController.discount.toString());
+    }else{
+      discount =
+        TextEditingController(text: estimateController.discount.toString());
+    }
+    
   }
 
   @override
@@ -29,7 +39,6 @@ class _DiscountPageState extends State<DiscountPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -41,18 +50,27 @@ class _DiscountPageState extends State<DiscountPage> {
       child: Column(
         children: [
           const Spacer(),
-          Text('Add Discount',style: Theme.of(context).textTheme.bodyLarge,),
+          Text(
+            'Add Discount',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
           const Spacer(),
-          input(context,
-              controller: discount,
-              text: "enter discount in percentage from 0 to 100",),
+          input(
+            context,
+            controller: discount,
+            text: "enter discount in percentage from 0 to 100",
+          ),
           const Spacer(),
           MainButton(
               title: "add Discount",
               onPressed: () {
                 int value = int.tryParse(discount.text) ?? 0;
                 if (value <= 100 && value >= 0) {
-                  invoiceController.changeDiscount(value);
+                  if(widget.state ==1){
+                    invoiceController.changeDiscount(value);
+                  }else{
+                    estimateController.changeDiscount(value);
+                  }
                   Get.back();
                 } else {
                   MessageWidget.failMessage(
@@ -70,10 +88,11 @@ class _DiscountPageState extends State<DiscountPage> {
     );
   }
 
-  Container input(BuildContext context,
-      {required TextEditingController controller,
-      required String text,
-     }) {
+  Container input(
+    BuildContext context, {
+    required TextEditingController controller,
+    required String text,
+  }) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: AppConstant.getWidth(context) * 0.9,

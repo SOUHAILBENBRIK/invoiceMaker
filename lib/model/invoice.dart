@@ -82,7 +82,7 @@ class InvoiceModel {
       note: map['note'] as String,
       discount: map['discount'] as int,
       currency:
-          CountryCurrency.fromMap(map['currency'] as Map<String, dynamic>),
+          CountryCurrency.fromMap(Map<String, dynamic>.from(map['currency'] as Map)),
       items: map['items'] != null
           ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
               // Convert each item to Map<String, dynamic>

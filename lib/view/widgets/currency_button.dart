@@ -16,6 +16,7 @@ class CurrencyButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         mainController.onChangeCurrentCountryCurrency(currency);
+        mainController.resetSearch();
         Get.back();
       },
       child: Visibility(

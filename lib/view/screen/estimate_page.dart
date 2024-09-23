@@ -29,6 +29,7 @@ class _EstimateScreenState extends State<EstimateScreen> {
   @override
   dispose() {
     super.dispose();
+    mainController.resetSearch();
     searchController.dispose();
   }
 

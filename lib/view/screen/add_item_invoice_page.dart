@@ -18,7 +18,7 @@ class AddItemInvoicePage extends StatefulWidget {
 
 class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
   final InvoiceController invoiceController = Get.find<InvoiceController>();
-   final EstimateController estimateController = Get.find<EstimateController>();
+  final EstimateController estimateController = Get.find<EstimateController>();
   late TextEditingController itemName;
   late TextEditingController itemPrice;
   late TextEditingController itemNotes;
@@ -30,13 +30,25 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
     itemPrice = TextEditingController();
     itemNotes = TextEditingController();
     itemQuantity = TextEditingController();
-    Future.delayed(Duration.zero, () {
-      itemName.text = invoiceController.currentItem.value?.name ?? "";
-      itemPrice.text =
-          invoiceController.currentItem.value?.price.toString() ?? "";
-      itemNotes.text = invoiceController.currentItem.value?.notes ?? "";
-      itemQuantity.text = "1";
-    });
+    var arguments = Get.arguments;
+    int state = arguments['state'] as int;
+    if (state == 1) {
+      Future.delayed(Duration.zero, () {
+        itemName.text = invoiceController.currentItem.value?.name ?? "";
+        itemPrice.text =
+            invoiceController.currentItem.value?.price.toString() ?? "";
+        itemNotes.text = invoiceController.currentItem.value?.notes ?? "";
+        itemQuantity.text = "1";
+      });
+    } else {
+      Future.delayed(Duration.zero, () {
+        itemName.text = estimateController.currentItem.value?.name ?? "";
+        itemPrice.text =
+            estimateController.currentItem.value?.price.toString() ?? "";
+        itemNotes.text = estimateController.currentItem.value?.notes ?? "";
+        itemQuantity.text = "1";
+      });
+    }
   }
 
   @override
@@ -90,7 +102,9 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
                     var arguments = Get.arguments;
                     int state = arguments['state'];
                     String id = AppConstant.generateRandomId(10);
-                    ItemInvoice item = ItemInvoice(
+                    
+                    if (state == 1) {
+                      ItemInvoice item = ItemInvoice(
                         id: id,
                         name: itemName.text,
                         notes: itemNotes.text,
@@ -98,16 +112,23 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
                         isTaxable: invoiceController.isTaxable.value,
                         discount: 10,
                         count: int.tryParse(itemQuantity.text) ?? 0);
-                    if(state == 1){
                       invoiceController.changeTotal(
-                        number: item.count, price: item.price);
-                    invoiceController.onAddItems(item);
-                    Get.offAllNamed(AppRoute.newInvoiceScreen);
-                    }else{
+                          number: item.count, price: item.price);
+                      invoiceController.onAddItems(item);
+                      Get.offAllNamed(AppRoute.newInvoiceScreen);
+                    } else {
+                      ItemInvoice item = ItemInvoice(
+                        id: id,
+                        name: itemName.text,
+                        notes: itemNotes.text,
+                        price: double.tryParse(itemPrice.text) ?? 0.0,
+                        isTaxable: estimateController.isTaxable.value,
+                        discount: 10,
+                        count: int.tryParse(itemQuantity.text) ?? 0);
                       estimateController.changeTotal(
-                        number: item.count, price: item.price);
-                    estimateController.onAddItems(item);
-                    Get.offAllNamed(AppRoute.newEstimateScreen);
+                          number: item.count, price: item.price);
+                      estimateController.onAddItems(item);
+                      Get.offAllNamed(AppRoute.newEstimateScreen);
                     }
                   },
                   bg: Colors.black,

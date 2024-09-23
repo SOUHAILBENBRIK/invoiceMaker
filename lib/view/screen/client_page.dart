@@ -58,7 +58,7 @@ class _ClientScreenState extends State<ClientScreen> {
                 Get.offAllNamed(AppRoute.settingsScreen);
 
               }else if ( state ==1){
-                Get.offAllNamed(AppRoute.invoiceScreen);
+                Get.offAllNamed(AppRoute.newInvoiceScreen);
               }
               
             },
