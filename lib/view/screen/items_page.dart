@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/estimate_controller.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/controller/item_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
@@ -21,6 +22,7 @@ class _ItemScreenState extends State<ItemScreen> {
   final MainController mainController = Get.find<MainController>();
   final ItemController itemController = Get.find<ItemController>();
   final InvoiceController invoiceController = Get.find<InvoiceController>();
+  final EstimateController estimateController = Get.find<EstimateController>();
   late TextEditingController searchController;
   @override
   void initState() {
@@ -68,7 +70,7 @@ class _ItemScreenState extends State<ItemScreen> {
             GestureDetector(
               onTap: () {
                 Get.toNamed(AppRoute.newItemScreen, arguments: {
-                  "invoice": true,
+                  "state": 1, //new invoice
                 });
               },
               child: const Icon(
@@ -87,9 +89,9 @@ class _ItemScreenState extends State<ItemScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.toNamed(AppRoute.newItemScreen, arguments: {
-              "invoice": true,
-            });
+            var arguments = Get.arguments;
+            int state = arguments['state'];
+            Get.toNamed(AppRoute.newItemScreen, arguments: {'state': state});
           },
         ),
         body: Obx(() {
@@ -161,14 +163,26 @@ class _ItemScreenState extends State<ItemScreen> {
                     return GestureDetector(
                       onTap: () {
                         var arguments = Get.arguments;
-                        bool invoice = arguments['invoice'] as bool;
-                        if (invoice) {
-                          invoiceController.onChangeCurrentItem(item);
-                          Get.toNamed(AppRoute.addItemInvoicePage);
-                        } else {
-                          itemController.onChangeCurrentItem(item);
-                          Get.toNamed(AppRoute.editItemScreen);
+                        int state = arguments['state'] as int;
+                        switch (state) {
+                          case 1:
+                            invoiceController.onChangeCurrentItem(item);
+                            Get.toNamed(AppRoute.addItemInvoicePage,arguments: {
+                              "state":1
+                            });
+                            break;
+                          case 2:
+                            estimateController.onChangeCurrentItem(item);
+                            Get.toNamed(AppRoute.addItemInvoicePage,arguments: {
+                              "state":2
+                            });
+                            break;
+                          default:
+                            itemController.onChangeCurrentItem(item);
+                            Get.toNamed(AppRoute.editItemScreen);
+                            break;
                         }
+                        
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

@@ -16,7 +16,7 @@ class MostRecentCurrencies extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Most recent",
+            "Most Use Currencies",
             style: TextStyle(color: Colors.black87, fontSize: 15),
             textAlign: TextAlign.start,
           ),

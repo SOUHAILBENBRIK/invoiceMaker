@@ -116,7 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return GestureDetector(
       onTap: () {
         Get.toNamed(val.path,arguments: {
-          "invoice":false
+          "state":0
         });
       },
       child: Container(

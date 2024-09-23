@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
+import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
@@ -20,10 +21,11 @@ class NewInvoiceScreen extends StatefulWidget {
 
 class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
   final InvoiceController invoiceController = Get.find<InvoiceController>();
+  final MainController mainController = Get.find<MainController>();
   @override
   void initState() {
     final invoice = BusinessController().getAllItems("invoice");
-    invoiceController.changeInvoiceName("0" + invoice.length.toString());
+    invoiceController.changeInvoiceName("0${invoice.length + 1}");
     super.initState();
   }
 
@@ -63,7 +65,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                 child: NewButtonWidget(
                     title: "Client",
                     onPressed: () => Get.toNamed(AppRoute.clientScreen,
-                        arguments: {"invoice": true}),
+                        arguments: {"state": 1}),
                     icon: Icons.person_add),
               );
             }),
@@ -79,7 +81,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                     title: "Item",
                     onPressed: () =>
                         Get.toNamed(AppRoute.itemsScreen, arguments: {
-                          "invoice": true,
+                          "state": 1,
                         }),
                     icon: Icons.format_list_bulleted_add),
               );
@@ -100,15 +102,39 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
             SizedBox(
               height: AppConstant.getHeight(context) * 0.01,
             ),
-            Visibility(
-                visible: invoiceController.currentClient.value != null &&
-                    invoiceController.items.isNotEmpty &&
-                    invoiceController.duoDate.value != null,
-                child: MainButton(
-                    title: "Add invoice",
-                    onPressed: () {},
-                    bg: Colors.black,
-                    textColor: Colors.white)),
+            Obx(() {
+              return Visibility(
+                  visible: invoiceController.currentClient.value != null &&
+                      invoiceController.items.isNotEmpty &&
+                      invoiceController.duoDate.value != null && mainController.currentCountryCurrency.value != null,
+                  child: MainButton(
+                      title: "Add invoice",
+                      onPressed: () async {
+                        String id = AppConstant.generateRandomId(10);
+                        InvoiceModel invoice = InvoiceModel(
+                            id: id,
+                            clientName:
+                                invoiceController.currentClient.value!,
+                            invoiceNumber: invoiceController.invoiceName.value,
+                            discount: invoiceController.discount.value,
+                            invoiceDate: invoiceController.issuedDate.value
+                                    ?.toIso8601String() ??
+                                "",
+                            invoiceDue: invoiceController.duoDate.value
+                                    ?.toIso8601String() ??
+                                "",
+                            total: invoiceController.total.value,
+                            note: "",
+                            currency: mainController.currentCountryCurrency.value!,
+                            items: invoiceController.items);
+
+                        await BusinessController()
+                            .addItem("invoice", id, invoice.toMap());
+                        Get.offNamed(AppRoute.homeScreen);
+                      },
+                      bg: Colors.black,
+                      textColor: Colors.white));
+            }),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.01,
             ),
@@ -136,32 +162,14 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
             const Text("Total",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             const Spacer(),
-            GestureDetector(
-              onTap: () => Get.toNamed(AppRoute.currenciesScreen),
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8)),
-                child: const Row(
-                  children: [
-                    Text(
-                      "TND",
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.normal),
-                    ),
-                    Icon(Icons.arrow_drop_down)
-                  ],
-                ),
-              ),
-            ),
+            _currencyWidget(),
             const SizedBox(
               width: 10,
             ),
             Obx(() {
               return Text(
                 "${invoiceController.total.value}",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
               );
             }),
             const SizedBox(
@@ -169,6 +177,34 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
             ),
           ],
         ));
+  }
+
+  GestureDetector _currencyWidget() {
+    return GestureDetector(
+            onTap: () => Get.toNamed(AppRoute.currenciesScreen,arguments : {
+              'state':1
+            }),
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Row(
+                children: [
+                  Obx(
+                    () {
+                      return Text(
+                        mainController.currentCountryCurrency.value?.abbreviation??"",
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.normal),
+                      );
+                    }
+                  ),
+                  const Icon(Icons.arrow_drop_down)
+                ],
+              ),
+            ),
+          );
   }
 
   Widget checkedName(BuildContext context,
@@ -220,17 +256,21 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         trailing: SizedBox(
-                          width: AppConstant.getWidth(context) * 0.2,
+                          width: AppConstant.getWidth(context) * 0.5,
                           child: Row(
                             children: [
-                              Text(item.price.toString()),
                               const Spacer(),
+                              Text(
+                                item.price.toString(),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
                               GestureDetector(
                                   onTap: () {
                                     controller.onDeleteItems(item);
-                                    controller.changeTotal(
-                                        number: item.count,
-                                        price: item.price * -1);
+                                    controller.clearTotla();
                                   },
                                   child: const Icon(
                                     Icons.delete,
@@ -252,7 +292,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
           GestureDetector(
             onTap: () {
               Get.toNamed(AppRoute.itemsScreen, arguments: {
-                "invoice": true,
+                "state": 1,
               });
             },
             child: Container(
@@ -356,7 +396,8 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                 date: controller.issuedDate.value),
           ),
           _iconButton(context, controller,
-              text: invoiceController.invoiceName.value, icon: Icons.inventory_outlined),
+              text: invoiceController.invoiceName.value,
+              icon: Icons.inventory_outlined),
         ],
       ),
     );
@@ -407,7 +448,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
   discount(BuildContext context, InvoiceController invoiceController) {
     return GestureDetector(
       onTap: () {
-        Get.bottomSheet(DiscountPage());
+        Get.bottomSheet(const DiscountPage());
       },
       child: Container(
           width: AppConstant.getWidth(context) * 0.9,
@@ -429,7 +470,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
               Obx(() {
                 return Text(
                   "${invoiceController.discount.value}%",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
                 );
               }),
               const SizedBox(

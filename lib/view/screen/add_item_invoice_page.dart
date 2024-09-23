@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
+import 'package:quick_invoice/controller/estimate_controller.dart';
 import 'package:quick_invoice/controller/invoice_controller.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
@@ -17,6 +18,7 @@ class AddItemInvoicePage extends StatefulWidget {
 
 class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
   final InvoiceController invoiceController = Get.find<InvoiceController>();
+   final EstimateController estimateController = Get.find<EstimateController>();
   late TextEditingController itemName;
   late TextEditingController itemPrice;
   late TextEditingController itemNotes;
@@ -85,6 +87,8 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
                 child: MainButton(
                   title: "Add item",
                   onPressed: () async {
+                    var arguments = Get.arguments;
+                    int state = arguments['state'];
                     String id = AppConstant.generateRandomId(10);
                     ItemInvoice item = ItemInvoice(
                         id: id,
@@ -94,10 +98,17 @@ class _AddItemInvoicePageState extends State<AddItemInvoicePage> {
                         isTaxable: invoiceController.isTaxable.value,
                         discount: 10,
                         count: int.tryParse(itemQuantity.text) ?? 0);
-                    invoiceController.changeTotal(
+                    if(state == 1){
+                      invoiceController.changeTotal(
                         number: item.count, price: item.price);
                     invoiceController.onAddItems(item);
                     Get.offAllNamed(AppRoute.newInvoiceScreen);
+                    }else{
+                      estimateController.changeTotal(
+                        number: item.count, price: item.price);
+                    estimateController.onAddItems(item);
+                    Get.offAllNamed(AppRoute.newEstimateScreen);
+                    }
                   },
                   bg: Colors.black,
                   textColor: Colors.white,

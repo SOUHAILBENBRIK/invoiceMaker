@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         width: AppConstant.getWidth(context),
         child: Column(
           children: [
-            Spacer(),
+            const Spacer(),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10)
@@ -51,12 +51,12 @@ class _SplashScreenState extends State<SplashScreen> {
               width: AppConstant.getWidth(context)*0.5,
               height: AppConstant.getHeight(context)*0.5,
               child: SvgPicture.asset("assets/leading.svg")),
-            SizedBox(height: 20,),
-            SizedBox(
+            const SizedBox(height: 20,),
+            const SizedBox(
               height: 20,
               width: 20,
               child: CircularProgressIndicator(color: Colors.black,)),
-              Spacer(),
+              const Spacer(),
           ],
         ),
       ),

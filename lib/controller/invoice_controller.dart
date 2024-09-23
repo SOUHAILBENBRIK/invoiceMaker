@@ -6,6 +6,7 @@ import 'package:quick_invoice/model/item.dart';
 
 class InvoiceController extends GetxController {
   Rx<ClientModel?> currentClient = Rx<ClientModel?>(null);
+  
   RxList<ItemInvoice> items = <ItemInvoice>[].obs;
   Rx<DateTime?> duoDate = Rx<DateTime?>(null);
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
@@ -23,7 +24,9 @@ class InvoiceController extends GetxController {
   void changeInvoiceName (String val){
     invoiceName.value = val;
   }
-
+  void clearTotla(){
+    total.value = 0.0;
+  }
   void changeTotal({required int number, required double price}) {
     total.value = total.value + number * price;
     total.value = total.value - (discount / 100) * total.value;
@@ -53,6 +56,7 @@ class InvoiceController extends GetxController {
   void onChangeCurrentClient(ClientModel val) {
     currentClient.value = val;
   }
+  
 
   void onChangeCurrentItem(ItemModel val) {
     currentItem.value = val;

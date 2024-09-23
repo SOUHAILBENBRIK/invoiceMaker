@@ -45,18 +45,18 @@ class _DiscountPageState extends State<DiscountPage> {
           const Spacer(),
           input(context,
               controller: discount,
-              text: "enter discount in percentage from 1 to 100",),
+              text: "enter discount in percentage from 0 to 100",),
           const Spacer(),
           MainButton(
               title: "add Discount",
               onPressed: () {
                 int value = int.tryParse(discount.text) ?? 0;
-                if (value <= 100 && value > 0) {
+                if (value <= 100 && value >= 0) {
                   invoiceController.changeDiscount(value);
                   Get.back();
                 } else {
                   MessageWidget.failMessage(
-                      title: "enter number between 1% and 100%");
+                      title: "enter number between 0% and 100%");
                   discount.clear();
                 }
               },

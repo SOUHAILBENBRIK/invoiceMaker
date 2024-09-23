@@ -85,9 +85,9 @@ class _ClientScreenState extends State<ClientScreen> {
           ),
           onPressed: () {
             var arguments = Get.arguments;
-            bool invoice = arguments['invoice'] as bool;
+            int state = arguments['state'];
             Get.toNamed(AppRoute.newClientScreen,
-                arguments: {'invoice': invoice});
+                arguments: {'state': state});
           },
         ),
         body: Obx(() {
@@ -160,13 +160,17 @@ class _ClientScreenState extends State<ClientScreen> {
                     return GestureDetector(
                       onTap: () {
                         var arguments = Get.arguments;
-                        bool invoice = arguments['invoice'] as bool;
-                        if (invoice) {
-                          invoiceController.onChangeCurrentClient(client);
-                          Get.toNamed(AppRoute.newInvoiceScreen);
-                        } else {
-                          clientController.onChangeCurrentClient(client);
-                          Get.toNamed(AppRoute.editClientScreen);
+                        int state = arguments['state'] as int;
+                        switch (state) {
+                          case 0:
+                            clientController.onChangeCurrentClient(client);
+                            Get.toNamed(AppRoute.editClientScreen);
+                            break;
+                          case 1:
+                            invoiceController.onChangeCurrentClient(client);
+                            Get.toNamed(AppRoute.newInvoiceScreen);
+                            break;
+                          
                         }
                       },
                       child: Container(

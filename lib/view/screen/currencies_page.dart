@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/currency.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/currency_list.dart';
 import 'package:quick_invoice/view/widgets/all_currencies.dart';
-import 'package:quick_invoice/view/widgets/most_recent_currencies.dart';
+import 'package:quick_invoice/view/widgets/search_widget.dart';
 
 class CurrenciesPage extends StatefulWidget {
   const CurrenciesPage({super.key});
@@ -15,11 +16,27 @@ class CurrenciesPage extends StatefulWidget {
 
 class _CurrenciesPageState extends State<CurrenciesPage> {
   List<CountryCurrency> countryCurrencyList = [];
+  late TextEditingController controller;
+  final MainController mainController = Get.find<MainController>();
   @override
   void initState() {
-    countryCurrencyList =
-        currencyList.map((json) => CountryCurrency.fromJson(json)).toList();
+    _loadItems();
+    controller = TextEditingController();
     super.initState();
+  }
+
+  Future<void> _loadItems() async {
+    Future.delayed(Duration.zero, () {
+      countryCurrencyList =
+          currencyList.map((json) => CountryCurrency.fromJson(json)).toList();
+      mainController.currencies(countryCurrencyList);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,13 +60,14 @@ class _CurrenciesPageState extends State<CurrenciesPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              MostRecentCurrencies(
-                currency: countryCurrencyList[0],
+              const SizedBox(
+                height: 5,
               ),
+              SearchWidget(controller: controller),
               SizedBox(
                 height: AppConstant.getHeight(context) * .02,
               ),
-              AllCurrencies(currencies: countryCurrencyList)
+              const AllCurrencies()
             ],
           ),
         ),

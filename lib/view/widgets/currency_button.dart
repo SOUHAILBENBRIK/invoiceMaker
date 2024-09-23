@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/currency.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 
@@ -10,7 +12,12 @@ class CurrencyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MainController mainController = Get.find<MainController>();
     return GestureDetector(
+      onTap: () {
+        mainController.onChangeCurrentCountryCurrency(currency);
+        Get.back();
+      },
       child: Visibility(
           visible: !isMain,
           replacement: Container(

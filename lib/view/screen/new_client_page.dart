@@ -81,9 +81,9 @@ class _NewClientScreenState extends State<NewClientScreen> {
 
                     await BusinessController().addItem("client", id, client.toMap());
                     var arguments = Get.arguments;
-                        bool invoice = arguments['invoice'] as bool;
+                        int state = arguments['state'] as int;
                     Get.offNamed(AppRoute.clientScreen,arguments: {
-                      "invoice":invoice
+                      "state": state
                     });
                   },
                   bg: Colors.black,

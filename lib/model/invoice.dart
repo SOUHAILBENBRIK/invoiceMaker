@@ -3,45 +3,55 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:quick_invoice/model/client.dart';
+import 'package:quick_invoice/model/currency.dart';
+
 class InvoiceModel {
   final String id;
-  final String clientNameId;
+  final ClientModel clientName;
   final String invoiceNumber;
   final String invoiceDate;
   final String invoiceDue;
   final double total;
   final String note;
-
+  final int discount;
+  final CountryCurrency currency;
   final List<ItemInvoice> items;
   InvoiceModel({
     required this.id,
-    required this.clientNameId,
+    required this.clientName,
     required this.invoiceNumber,
     required this.invoiceDate,
     required this.invoiceDue,
     required this.total,
     required this.note,
+    required this.discount,
+    required this.currency,
     required this.items,
   });
 
   InvoiceModel copyWith({
     String? id,
-    String? clientNameId,
+    ClientModel? clientName,
     String? invoiceNumber,
     String? invoiceDate,
     String? invoiceDue,
     double? total,
     String? note,
+    int? discount,
+    CountryCurrency? currency,
     List<ItemInvoice>? items,
   }) {
     return InvoiceModel(
       id: id ?? this.id,
-      clientNameId: clientNameId ?? this.clientNameId,
+      clientName: clientName ?? this.clientName,
       invoiceNumber: invoiceNumber ?? this.invoiceNumber,
       invoiceDate: invoiceDate ?? this.invoiceDate,
       invoiceDue: invoiceDue ?? this.invoiceDue,
       total: total ?? this.total,
       note: note ?? this.note,
+      discount: discount ?? this.discount,
+      currency: currency ?? this.currency,
       items: items ?? this.items,
     );
   }
@@ -49,12 +59,14 @@ class InvoiceModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'clientNameId': clientNameId,
+      'clientName': clientName.toMap(),
       'invoiceNumber': invoiceNumber,
       'invoiceDate': invoiceDate,
       'invoiceDue': invoiceDue,
       'total': total,
       'note': note,
+      'discount': discount,
+      'currency': currency.toMap(),
       'items': items.map((x) => x.toMap()).toList(),
     };
   }
@@ -62,13 +74,20 @@ class InvoiceModel {
   factory InvoiceModel.fromMap(Map<String, dynamic> map) {
     return InvoiceModel(
       id: map['id'] as String,
-      clientNameId: map['clientNameId'] as String,
+      clientName: ClientModel.fromMap(map['clientName'] as Map<String,dynamic>),
       invoiceNumber: map['invoiceNumber'] as String,
       invoiceDate: map['invoiceDate'] as String,
       invoiceDue: map['invoiceDue'] as String,
       total: map['total'] as double,
       note: map['note'] as String,
-      items: List<ItemInvoice>.from((map['items'] as List<int>).map<ItemInvoice>((x) => ItemInvoice.fromMap(x as Map<String,dynamic>),),),
+      discount: map['discount'] as int,
+      currency: CountryCurrency.fromMap(map['currency'] as Map<String,dynamic>),
+      items: map['items'] != null 
+      ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
+          // Convert each item to Map<String, dynamic>
+          return ItemInvoice.fromMap(Map<String, dynamic>.from(item as Map));
+        }).toList() 
+      : [],
     );
   }
 
@@ -79,7 +98,7 @@ class InvoiceModel {
 
   @override
   String toString() {
-    return 'InvoiceModel(id: $id, clientNameId: $clientNameId, invoiceNumber: $invoiceNumber, invoiceDate: $invoiceDate, invoiceDue: $invoiceDue, total: $total, note: $note, items: $items)';
+    return 'InvoiceModel(id: $id, clientName: $clientName, invoiceNumber: $invoiceNumber, invoiceDate: $invoiceDate, invoiceDue: $invoiceDue, total: $total, note: $note, discount: $discount, currency: $currency, items: $items)';
   }
 
   @override
@@ -88,24 +107,28 @@ class InvoiceModel {
   
     return 
       other.id == id &&
-      other.clientNameId == clientNameId &&
+      other.clientName == clientName &&
       other.invoiceNumber == invoiceNumber &&
       other.invoiceDate == invoiceDate &&
       other.invoiceDue == invoiceDue &&
       other.total == total &&
       other.note == note &&
+      other.discount == discount &&
+      other.currency == currency &&
       listEquals(other.items, items);
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      clientNameId.hashCode ^
+      clientName.hashCode ^
       invoiceNumber.hashCode ^
       invoiceDate.hashCode ^
       invoiceDue.hashCode ^
       total.hashCode ^
       note.hashCode ^
+      discount.hashCode ^
+      currency.hashCode ^
       items.hashCode;
   }
 }
@@ -185,25 +208,24 @@ class ItemInvoice {
   @override
   bool operator ==(covariant ItemInvoice other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.name == name &&
-      other.notes == notes &&
-      other.price == price &&
-      other.isTaxable == isTaxable &&
-      other.discount == discount &&
-      other.count == count;
+
+    return other.id == id &&
+        other.name == name &&
+        other.notes == notes &&
+        other.price == price &&
+        other.isTaxable == isTaxable &&
+        other.discount == discount &&
+        other.count == count;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      name.hashCode ^
-      notes.hashCode ^
-      price.hashCode ^
-      isTaxable.hashCode ^
-      discount.hashCode ^
-      count.hashCode;
+        name.hashCode ^
+        notes.hashCode ^
+        price.hashCode ^
+        isTaxable.hashCode ^
+        discount.hashCode ^
+        count.hashCode;
   }
 }

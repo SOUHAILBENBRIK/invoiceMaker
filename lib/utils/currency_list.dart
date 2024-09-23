@@ -1,3 +1,4 @@
+
 const currencyList = [
   {"country": "Afghanistan", "currency": "Afghani", "abbreviation": "AFN"},
   {"country": "Albania", "currency": "Lek", "abbreviation": "ALL"},
@@ -221,7 +222,7 @@ const currencyList = [
     "abbreviation": "AED"
   },
   {"country": "United Kingdom", "currency": "Pound", "abbreviation": "GBP"},
-  {"country": "United States", "currency": "Dollar", "abbreviation": "USD"},
+  {"country": "United States", "currency": "Dollar", "abbreviation": "USD"}, 
   {"country": "Uruguay", "currency": "Peso", "abbreviation": "UYU"},
   {"country": "Uzbekistan", "currency": "Som", "abbreviation": "UZS"},
   {"country": "Vanuatu", "currency": "Vatu", "abbreviation": "VUV"},
