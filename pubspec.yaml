@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
   open_file: ^3.5.5
+  path_provider: ^2.1.4
   
  
 

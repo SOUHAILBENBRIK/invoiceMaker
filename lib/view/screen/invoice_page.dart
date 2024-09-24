@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 
 import 'package:quick_invoice/controller/main_controller.dart';
-import 'package:quick_invoice/controller/pdf_api.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
-import 'package:quick_invoice/view/widgets/pdf_invoice.dart';
 import 'package:quick_invoice/view/widgets/search_widget.dart';
 
 class InvoiceScreen extends StatefulWidget {
@@ -115,9 +113,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     final InvoiceModel item = mainController.filteredInvoice[index];
                     return GestureDetector(
                       onTap: () async {
-                        final pdfFile = await PdfInvoiceApi.generate(item);
-
-                    PdfApi.openFile(pdfFile);
+                        
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

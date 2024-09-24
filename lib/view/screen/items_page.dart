@@ -102,7 +102,6 @@ class _ItemScreenState extends State<ItemScreen> {
           onPressed: () {
             var arguments = Get.arguments;
             int state = arguments['state'];
-            print(state);
             Get.toNamed(AppRoute.newItemScreen, arguments: {'state': state});
           },
         ),
@@ -176,7 +175,6 @@ class _ItemScreenState extends State<ItemScreen> {
                       onTap: () {
                         var arguments = Get.arguments;
                         int state = arguments['state'] as int;
-                        print(state);
                         switch (state) {
                           case 1:
                             invoiceController.onChangeCurrentItem(item);
@@ -208,7 +206,7 @@ class _ItemScreenState extends State<ItemScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Name : ${item.name}"),
-                            SizedBox(height: 5,),
+                            const SizedBox(height: 5,),
                             Text("Price : ${item.price}"),
                           ],
                         ),

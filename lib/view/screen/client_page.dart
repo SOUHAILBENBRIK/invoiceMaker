@@ -202,7 +202,7 @@ class _ClientScreenState extends State<ClientScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Name : ${client.name}",overflow: TextOverflow.ellipsis,),
-                            SizedBox(height: 5,),
+                            const SizedBox(height: 5,),
                             Text("Email : ${client.email}",overflow: TextOverflow.ellipsis,),
                           ],
                         ),
