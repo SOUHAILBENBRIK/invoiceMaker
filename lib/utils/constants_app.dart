@@ -39,10 +39,6 @@ class AppConstant {
         icon: Icons.email,
         name: "Talk with developper",
         path: AppRoute.homeScreen),
-    IconParameters(
-        icon: Icons.rate_review,
-        name: "Rate the app",
-        path: AppRoute.homeScreen),
   ];
 
   static double getHeight(BuildContext context) {

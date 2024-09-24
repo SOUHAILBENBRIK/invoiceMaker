@@ -26,7 +26,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
   @override
   void initState() {
     final estimates = BusinessController().getAllItems("estimate");
-    estimateController.changeEstimateName("E0${estimates.length + 1}");
+    estimateController.changeEstimateName("ES0${estimates.length + 1}");
     super.initState();
   }
 

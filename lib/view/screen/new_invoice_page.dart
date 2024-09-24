@@ -25,7 +25,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
   @override
   void initState() {
     final invoice = BusinessController().getAllItems("invoice");
-    invoiceController.changeInvoiceName("0${invoice.length + 1}");
+    invoiceController.changeInvoiceName("INV0${invoice.length + 1}");
     super.initState();
   }
 

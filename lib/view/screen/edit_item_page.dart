@@ -7,6 +7,7 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class EditItemScreen extends StatefulWidget {
   const EditItemScreen({super.key});
@@ -30,13 +31,11 @@ class _EditItemScreenState extends State<EditItemScreen> {
       itemName.text = itemController.currentItem.value?.name ?? "";
       itemPrice.text = itemController.currentItem.value?.price.toString() ?? "";
       itemNotes.text = itemController.currentItem.value?.notes ?? "";
-      
     });
   }
 
   @override
   void dispose() {
-    
     itemName.dispose();
     itemPrice.dispose();
     itemNotes.dispose();
@@ -67,7 +66,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
               part2(context),
               SizedBox(height: AppConstant.getHeight(context) * 0.02),
               part1(context),
-              SizedBox(height: AppConstant.getHeight(context)*0.02,),
+              SizedBox(
+                height: AppConstant.getHeight(context) * 0.02,
+              ),
               deleteItem(context),
               const Spacer(flex: 4),
               AnimatedPadding(
@@ -79,17 +80,25 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 ),
                 child: MainButton(
                   title: "Save item",
-                  onPressed: () async{
-                    
-                    ItemModel item = ItemModel(
-                        id: itemController.currentItem.value?.id??"",
-                        name: itemName.text,
-                        notes: itemNotes.text,
-                        price: double.tryParse(itemPrice.text) ?? 0.0,
-                        isTaxable: itemController.isTaxable.value);
+                  onPressed: () async {
+                    if (itemName.text.isEmpty) {
+                      MessageWidget.failMessage(title: "Enter Client Name");
+                    } else if (itemPrice.text.isEmpty) {
+                      MessageWidget.failMessage(title: "Enter Price");
+                    } else {
+                      ItemModel item = ItemModel(
+                          id: itemController.currentItem.value?.id ?? "",
+                          name: itemName.text,
+                          notes: itemNotes.text,
+                          price: double.tryParse(itemPrice.text) ?? 0.0,
+                          isTaxable: itemController.isTaxable.value);
 
-                    await BusinessController().updateItem("item", itemController.currentItem.value?.id??"", item.toMap());
-                    Get.offNamed(AppRoute.itemsScreen);
+                      await BusinessController().updateItem(
+                          "item",
+                          itemController.currentItem.value?.id ?? "",
+                          item.toMap());
+                      Get.offNamed(AppRoute.itemsScreen);
+                    }
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -112,7 +121,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
       padding: EdgeInsets.symmetric(
           vertical: AppConstant.getHeight(context) * 0.015, horizontal: 2),
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      
       decoration: BoxDecoration(
           color: AppTheme.lightSecondary,
           borderRadius: BorderRadius.circular(10)),
@@ -124,8 +132,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context,
-              controller: itemNotes, text: "Notes (optional)"),
+          input(context, controller: itemNotes, text: "Notes (optional)"),
         ],
       ),
     );
@@ -199,9 +206,14 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       ),
                       child: const Icon(Icons.check, color: Colors.grey),
                     ),
-                    Text("Taxable",style: TextStyle(color: itemController.isTaxable.value == false
-                        ? Colors.black
-                        : Colors.white,),)
+                    Text(
+                      "Taxable",
+                      style: TextStyle(
+                        color: itemController.isTaxable.value == false
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -211,7 +223,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
       ),
     );
   }
-  
+
   deleteItem(BuildContext context) {
     return GestureDetector(
       onTap: () {

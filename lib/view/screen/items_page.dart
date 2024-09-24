@@ -204,11 +204,12 @@ class _ItemScreenState extends State<ItemScreen> {
                           color: AppTheme.lightSecondary,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.name),
-                            const Spacer(),
-                            Text(item.price.toString()),
+                            Text("Name : ${item.name}"),
+                            SizedBox(height: 5,),
+                            Text("Price : ${item.price}"),
                           ],
                         ),
                       ),

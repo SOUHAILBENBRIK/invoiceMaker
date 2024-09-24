@@ -9,6 +9,7 @@ import 'package:quick_invoice/model/icon_parameters.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -21,15 +22,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final MainController mainController = Get.find<MainController>();
   Uint8List? image;
 
- 
- @override
+  @override
   void initState() {
     super.initState();
     Business? business = Business.fromMap(Map<String, dynamic>.from(
         BusinessController().getItem("business", "me")));
-    
+
     image = business.image;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,14 +76,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Spacer(),
           Visibility(
             visible: image == null,
-            replacement: image != null ? CircleAvatar(backgroundImage: Image.memory(image!).image,radius: 20,) : const SizedBox(),
+            replacement: image != null
+                ? CircleAvatar(
+                    backgroundImage: Image.memory(image!).image,
+                    radius: 20,
+                  )
+                : const SizedBox(),
             child: Container(
               height: AppConstant.getWidth(context) * 0.12,
               width: AppConstant.getWidth(context) * 0.12,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppTheme.lightAccent.withOpacity(0.6),
-                  ),
+                borderRadius: BorderRadius.circular(10),
+                color: AppTheme.lightAccent.withOpacity(0.6),
+              ),
               child: Center(
                 child: Text(
                   name[0].toUpperCase(),
@@ -107,19 +113,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             ...list.map((val) {
-              return buttonParameter(context, val);
+              return buttonParameter(
+                context,
+                val,
+                onTap: () {
+                  Get.toNamed(val.path, arguments: {"state": 0});
+                },
+              );
             })
           ],
         ));
   }
 
-  GestureDetector buttonParameter(BuildContext context, IconParameters val) {
+  GestureDetector buttonParameter(BuildContext context, IconParameters val,
+      {required Function() onTap}) {
     return GestureDetector(
-      onTap: () {
-        Get.toNamed(val.path,arguments: {
-          "state":0
-        });
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Row(
@@ -147,9 +156,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             ...list.map((val) {
-              return buttonParameter(context, val);
+              return buttonParameter(context, val, onTap: () {
+                Uri url = Uri.parse("https://flowcv.me/souhailbenbrik");
+                _launchUrl(url);
+              });
             })
           ],
         ));
+  }
+
+  Future<void> _launchUrl(Uri _url) async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

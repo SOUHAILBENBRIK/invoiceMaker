@@ -11,7 +11,7 @@ class EstimateController extends GetxController {
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
   RxDouble total = 0.0.obs;
   RxInt discount = 0.obs;
-  RxString estimateName = "INV001".obs;
+  RxString estimateName = "ES001".obs;
 
   RxBool isTaxable = false.obs;
   Rx<ItemModel?> currentItem = Rx<ItemModel?>(null);

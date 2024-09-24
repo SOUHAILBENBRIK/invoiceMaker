@@ -21,8 +21,9 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       final MainController mainController = Get.find<MainController>();
+      switchToTab(mainController.homeIndex.value);
       mainController.resetSearch();
     });
     tabController = TabController(length: 2, vsync: this);
@@ -75,12 +76,6 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.info,
-            ),
-            onPressed: () => debugPrint("hi"),
           ),
           actions: [
             IconButton(

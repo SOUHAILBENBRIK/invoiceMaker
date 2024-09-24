@@ -75,13 +75,15 @@ class EstimateModel {
       total: map['total'] as double,
       note: map['note'] as String,
       discount: map['discount'] as int,
-      items: map['items'] != null 
-      ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
-          // Convert each item to Map<String, dynamic>
-          return ItemInvoice.fromMap(Map<String, dynamic>.from(item as Map));
-        }).toList() 
-      : [],
-      currency: CountryCurrency.fromMap(map['currency'] as Map<String,dynamic>),
+      currency: CountryCurrency.fromMap(
+          Map<String, dynamic>.from(map['currency'] as Map)),
+      items: map['items'] != null
+          ? (map['items'] as List<dynamic>).map<ItemInvoice>((item) {
+              // Convert each item to Map<String, dynamic>
+              return ItemInvoice.fromMap(
+                  Map<String, dynamic>.from(item as Map));
+            }).toList()
+          : [],
     );
   }
 

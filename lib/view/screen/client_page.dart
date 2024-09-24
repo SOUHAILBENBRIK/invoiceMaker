@@ -175,11 +175,15 @@ class _ClientScreenState extends State<ClientScreen> {
                         switch (state) {
                           case 0:
                             clientController.onChangeCurrentClient(client);
-                            Get.toNamed(AppRoute.editClientScreen);
+                            Get.toNamed(AppRoute.editClientScreen,arguments: {
+                              'state':state
+                            });
                             break;
                           case 1:
                             invoiceController.onChangeCurrentClient(client);
-                            Get.toNamed(AppRoute.newInvoiceScreen);
+                            Get.toNamed(AppRoute.newInvoiceScreen,arguments: {
+                              'state':state
+                            });
                             break;
                           
                         }
@@ -194,11 +198,12 @@ class _ClientScreenState extends State<ClientScreen> {
                           color: AppTheme.lightSecondary,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(client.name),
-                            const Spacer(),
-                            Text(client.email),
+                            Text("Name : ${client.name}",overflow: TextOverflow.ellipsis,),
+                            SizedBox(height: 5,),
+                            Text("Email : ${client.email}",overflow: TextOverflow.ellipsis,),
                           ],
                         ),
                       ),

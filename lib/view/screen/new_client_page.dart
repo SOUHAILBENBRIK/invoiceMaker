@@ -6,6 +6,7 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class NewClientScreen extends StatefulWidget {
   const NewClientScreen({super.key});
@@ -19,7 +20,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
   late TextEditingController phone;
   late TextEditingController email;
   late TextEditingController address;
-  
+
   @override
   void initState() {
     super.initState();
@@ -71,20 +72,26 @@ class _NewClientScreenState extends State<NewClientScreen> {
                 child: MainButton(
                   title: "Save Client",
                   onPressed: () async {
-                    String id = AppConstant.generateRandomId(10);
-                  ClientModel client = ClientModel(
-                        id: id,
-                        name: clientName.text,
-                        email: email.text,
-                        address: address.text,
-                        phone: phone.text);
+                    if (clientName.text.isEmpty) {
+                      MessageWidget.failMessage(title: "Enter Client Name");
+                    }else if(clientName.text.isNotEmpty && email.text.isNotEmpty && !email.text.isEmail){
+                      MessageWidget.failMessage(title: "Check Email Format");
+                    }else{
+                      String id = AppConstant.generateRandomId(10);
+                      ClientModel client = ClientModel(
+                          id: id,
+                          name: clientName.text,
+                          email: email.text,
+                          address: address.text,
+                          phone: phone.text);
 
-                    await BusinessController().addItem("client", id, client.toMap());
-                    var arguments = Get.arguments;
-                        int state = arguments['state'] as int;
-                    Get.offNamed(AppRoute.clientScreen,arguments: {
-                      "state": state
-                    });
+                      await BusinessController()
+                          .addItem("client", id, client.toMap());
+                      var arguments = Get.arguments;
+                      int state = arguments['state'] as int;
+                      Get.offNamed(AppRoute.clientScreen,
+                          arguments: {"state": state});
+                    }
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -118,6 +125,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
             padding: const EdgeInsets.all(5),
             width: AppConstant.getWidth(context) * 0.9,
             child: TextField(
+              maxLength: 25,
               style: const TextStyle(color: Colors.black, fontSize: 14),
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
@@ -130,22 +138,32 @@ class _NewClientScreenState extends State<NewClientScreen> {
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: phone, text: "Phone",type: TextInputType.phone),
+          input(context,
+              controller: phone, text: "Phone", type: TextInputType.phone),
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: email, text: "E-mail",type: TextInputType.emailAddress),
+          input(context,
+              controller: email,
+              text: "E-mail",
+              type: TextInputType.emailAddress),
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
-          input(context, controller: address, text: "Address",textAction: TextInputAction.done),
+          input(context,
+              controller: address,
+              text: "Address",
+              textAction: TextInputAction.done),
         ],
       ),
     );
   }
 
   Container input(BuildContext context,
-      {required TextEditingController controller, required String text, TextInputType type= TextInputType.text,TextInputAction textAction = TextInputAction.next}) {
+      {required TextEditingController controller,
+      required String text,
+      TextInputType type = TextInputType.text,
+      TextInputAction textAction = TextInputAction.next}) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: AppConstant.getWidth(context) * 0.9,

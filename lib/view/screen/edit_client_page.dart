@@ -7,6 +7,7 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class EditClientScreen extends StatefulWidget {
   const EditClientScreen({super.key});
@@ -87,16 +88,30 @@ class _EditClientScreenState extends State<EditClientScreen> {
                 child: MainButton(
                   title: "Save changes",
                   onPressed: () async {
-                    ClientModel client = ClientModel(
-                        id: clientController.currentClient.value?.id??"",
-                        name: clientController.currentClient.value?.name??"",
-                        phone: clientController.currentClient.value?.phone??"",
-                        email: clientController.currentClient.value?.email??"",
-                        address: clientController.currentClient.value?.address??"",);
-                   
+                    if (clientName.text.isEmpty) {
+                      MessageWidget.failMessage(title: "Enter Client Name");
+                    } else if (clientName.text.isNotEmpty &&
+                        email.text.isNotEmpty &&
+                        email.text.isEmail) {
+                      MessageWidget.failMessage(title: "Check Email Format");
+                    } else {
+                      ClientModel client = ClientModel(
+                        id: clientController.currentClient.value?.id ?? "",
+                        name: clientName.text,
+                        phone: phone.text,
+                        email: email.text,
+                        address: address.text,
+                      );
+                      await BusinessController().updateItem(
+                          "client",
+                          clientController.currentClient.value?.id ?? "",
+                          client.toMap());
 
-                    await BusinessController().updateItem("client", clientController.currentClient.value?.id??"", client.toMap());
-                    Get.offNamed(AppRoute.clientScreen);
+                      var argument = Get.arguments;
+                      int state = argument['state'];
+                      Get.offNamed(AppRoute.clientScreen,
+                          arguments: {"state": state});
+                    }
                   },
                   bg: Colors.black,
                   textColor: Colors.white,

@@ -12,7 +12,7 @@ class InvoiceController extends GetxController {
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
   RxDouble total = 0.0.obs;
   RxInt discount = 0.obs;
-  RxString invoiceName = "001".obs;
+  RxString invoiceName = "INV001".obs;
 
   RxBool isTaxable = false.obs;
   Rx<ItemModel?> currentItem = Rx<ItemModel?>(null);

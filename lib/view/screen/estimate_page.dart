@@ -124,11 +124,23 @@ class _EstimateScreenState extends State<EstimateScreen> {
                           color: AppTheme.lightSecondary,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.estimateNumber),
-                            const Spacer(),
-                            Text(item.total.toString()),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("Name : ${item.estimateNumber}"),
+                                const Spacer(),
+                                Text("Total : ${item.total}"),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                
+                                Text(item.estimateDate.split("T")[0])
+                              ],
+                            )
                           ],
                         ),
                       ),

@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/controller/pdf_api.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/pdf_invoice.dart';
 import 'package:quick_invoice/view/widgets/search_widget.dart';
 
 class InvoiceScreen extends StatefulWidget {
@@ -112,7 +114,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   itemBuilder: (context, index) {
                     final InvoiceModel item = mainController.filteredInvoice[index];
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final pdfFile = await PdfInvoiceApi.generate(item);
+
+                    PdfApi.openFile(pdfFile);
+                      },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,
                         margin: const EdgeInsets.symmetric(
@@ -123,11 +129,24 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           color: AppTheme.lightSecondary,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.invoiceNumber),
-                            const Spacer(),
-                            Text(item.total.toString()),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("Name : ${item.invoiceNumber}"),
+                                const Spacer(),
+                                Text("Total : ${item.total}"),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("ClientName : ${item.clientName.name}"),
+                                const Spacer(),
+                                Text(item.invoiceDate.split("T")[0])
+                              ],
+                            )
                           ],
                         ),
                       ),

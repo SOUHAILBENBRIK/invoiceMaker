@@ -8,6 +8,7 @@ import 'package:quick_invoice/controller/business_controller.dart';
 import 'package:quick_invoice/controller/main_controller.dart';
 import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
+import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
 import 'package:quick_invoice/view/widgets/message_widget.dart';
@@ -56,7 +57,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () => Get.offAllNamed(AppRoute.settingsScreen),
           child: const Icon(Icons.close),
         ),
         title: Text(
@@ -66,7 +67,7 @@ class _ManageBusinessScreenState extends State<ManageBusinessScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        
         child: Container(
           width: AppConstant.getHeight(context),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),

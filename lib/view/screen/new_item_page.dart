@@ -7,6 +7,7 @@ import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/route_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
 import 'package:quick_invoice/view/widgets/main_button.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 
 class NewItemScreen extends StatefulWidget {
   const NewItemScreen({super.key});
@@ -70,22 +71,29 @@ class _NewItemScreenState extends State<NewItemScreen> {
                 ),
                 child: MainButton(
                   title: "Save item",
-                  onPressed: () async{
-                    String id = AppConstant.generateRandomId(10);
-                     var arguments = Get.arguments;
-                        int state = arguments['state'] as int;
-                    ItemModel item = ItemModel(
-                        id: id,
-                        name: itemName.text,
-                        notes: itemNotes.text,
-                        price: double.tryParse(itemPrice.text) ?? 0.0,
-                        isTaxable: itemController.isTaxable.value);
+                  onPressed: () async {
+                    if (itemName.text.isEmpty) {
+                      MessageWidget.failMessage(title: "Enter Client Name");
+                    } else if(itemPrice.text.isEmpty){
+                      MessageWidget.failMessage(title: "Enter Price");
+                    }
+                      else {
+                      String id = AppConstant.generateRandomId(10);
+                      var arguments = Get.arguments;
+                      int state = arguments['state'] as int;
+                      ItemModel item = ItemModel(
+                          id: id,
+                          name: itemName.text,
+                          notes: itemNotes.text,
+                          price: double.tryParse(itemPrice.text) ?? 0.0,
+                          isTaxable: itemController.isTaxable.value);
 
-                    await BusinessController().addItem("item", id, item.toMap());
-                    Get.offNamed(AppRoute.itemsScreen, arguments: {
-                          "state": state,
-                        });
-                    
+                      await BusinessController()
+                          .addItem("item", id, item.toMap());
+                      Get.offNamed(AppRoute.itemsScreen, arguments: {
+                        "state": state,
+                      });
+                    }
                   },
                   bg: Colors.black,
                   textColor: Colors.white,
@@ -115,7 +123,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           input(context,
-              controller: itemName, text: "item or service provided"),
+              controller: itemName, text: "item or service provided",hasMax: true),
           SizedBox(
             height: AppConstant.getHeight(context) * 0.015,
           ),
@@ -126,11 +134,13 @@ class _NewItemScreenState extends State<NewItemScreen> {
   }
 
   Container input(BuildContext context,
-      {required TextEditingController controller, required String text}) {
+      {required TextEditingController controller, required String text,bool hasMax = false}) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: AppConstant.getWidth(context) * 0.9,
+      
       child: TextField(
+        maxLength: hasMax?20:null,
         style: const TextStyle(color: Colors.black, fontSize: 14),
         textInputAction: TextInputAction.done,
         cursorColor: Colors.black,
