@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 
 import 'package:quick_invoice/controller/main_controller.dart';
+
+import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/pdf_invoice_widget.dart';
 import 'package:quick_invoice/view/widgets/search_widget.dart';
 
 class InvoiceScreen extends StatefulWidget {
@@ -18,12 +21,16 @@ class InvoiceScreen extends StatefulWidget {
 class _InvoiceScreenState extends State<InvoiceScreen> {
   late TextEditingController searchController;
   List list = [];
+  Business? business;
   final MainController mainController = Get.find<MainController>();
   @override
   void initState() {
     super.initState();
+
     searchController = TextEditingController();
     _loadInvoices();
+    business = Business.fromMap(Map<String, dynamic>.from(
+        BusinessController().getItem("business", "me")));
   }
 
   @override
@@ -110,10 +117,19 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               child: ListView.builder(
                   itemCount: mainController.filteredInvoice.length,
                   itemBuilder: (context, index) {
-                    final InvoiceModel item = mainController.filteredInvoice[index];
+                    final InvoiceModel item =
+                        mainController.filteredInvoice[index];
                     return GestureDetector(
                       onTap: () async {
-                        
+                        final InvoicePdfGenerator _pdfGenerator =
+                            InvoicePdfGenerator(
+                          company: business!,
+                          invoice: item,
+                        );
+                        await _pdfGenerator.generateInvoicePdf();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Invoice PDF generated!')),
+                        );
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,

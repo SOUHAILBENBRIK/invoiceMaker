@@ -23,8 +23,8 @@ dependencies:
   date_picker_plus: ^4.1.0
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
-  open_file: ^3.5.5
   path_provider: ^2.1.4
+  open_filex: ^4.5.0
   
  
 
@@ -45,4 +45,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/fonts/.
+    - assets/fonts/Roboto-Regular.ttf
+    - assets/fonts/Roboto-Bold.ttf
