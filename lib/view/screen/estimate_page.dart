@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:quick_invoice/controller/business_controller.dart';
 
 import 'package:quick_invoice/controller/main_controller.dart';
+import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/estimate.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
+import 'package:quick_invoice/view/widgets/pdf_estimate_widget.dart';
 import 'package:quick_invoice/view/widgets/search_widget.dart';
 
 class EstimateScreen extends StatefulWidget {
@@ -19,11 +22,14 @@ class _EstimateScreenState extends State<EstimateScreen> {
   late TextEditingController searchController;
   List list = [];
   final MainController mainController = Get.find<MainController>();
+  Business? business;
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
     _loadEstimates();
+    business = Business.fromMap(Map<String, dynamic>.from(
+        BusinessController().getItem("business", "me")));
   }
 
   @override
@@ -111,9 +117,18 @@ class _EstimateScreenState extends State<EstimateScreen> {
               child: ListView.builder(
                   itemCount: mainController.filteredEstimate.length,
                   itemBuilder: (context, index) {
-                    final EstimateModel item = mainController.filteredEstimate[index];
+                    final EstimateModel item =
+                        mainController.filteredEstimate[index];
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final EstimatePdfGenerator _pdfGenerator =
+                            EstimatePdfGenerator(
+                          company: business!,
+                          estimate: item,
+                        );
+                        await _pdfGenerator.generateInvoicePdf();
+                        MessageWidget.sucessMessage(title: "Pdf Generated");
+                      },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,
                         margin: const EdgeInsets.symmetric(
@@ -136,10 +151,7 @@ class _EstimateScreenState extends State<EstimateScreen> {
                               ],
                             ),
                             Row(
-                              children: [
-                                
-                                Text(item.estimateDate.split("T")[0])
-                              ],
+                              children: [Text(item.estimateDate.split("T")[0])],
                             )
                           ],
                         ),

@@ -1,17 +1,17 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:open_filex/open_filex.dart';
 import 'package:quick_invoice/model/business.dart';
-import 'package:quick_invoice/model/invoice.dart';
+import 'package:quick_invoice/model/estimate.dart';
 
-class InvoicePdfGenerator {
+class EstimatePdfGenerator {
   final Business company;
-  final InvoiceModel invoice;
+  final EstimateModel estimate;
 
-  InvoicePdfGenerator({required this.company, required this.invoice});
+  EstimatePdfGenerator({required this.company, required this.estimate});
 
   Future<void> generateInvoicePdf() async {
     final pdf = pw.Document();
@@ -30,7 +30,7 @@ class InvoicePdfGenerator {
               // Company Info and Logo
               pw.Align(
                 alignment: pw.Alignment.center,
-                child: pw.Text('Invoice 0${invoice.invoiceNumber.split("INV")[1]}', style: pw.TextStyle(fontSize: 18, font: robotoRegular)),
+                child: pw.Text('Estimate 0${estimate.estimateNumber.split("ES")[1]}', style: pw.TextStyle(fontSize: 18, font: robotoRegular)),
               ),
               pw.SizedBox(height: 20),
               pw.Row(
@@ -59,13 +59,13 @@ class InvoicePdfGenerator {
               pw.SizedBox(height: 30),
               pw.Align(
                 alignment: pw.Alignment.centerRight,
-                child: pw.Text('Discount:  ${invoice.discount}%', style: pw.TextStyle(fontSize: 18, font: robotoRegular)),
+                child: pw.Text('Discount:  ${estimate.discount}%', style: pw.TextStyle(fontSize: 18, font: robotoRegular)),
               ),
               pw.SizedBox(height: 10),
               // Total Amount
               pw.Align(
                 alignment: pw.Alignment.centerRight,
-                child: pw.Text('Total:  ${invoice.total} ${invoice.currency.abbreviation}', style: pw.TextStyle(fontSize: 18, font: robotoBold)),
+                child: pw.Text('Total:  ${estimate.total} ${estimate.currency.abbreviation}', style: pw.TextStyle(fontSize: 18, font: robotoBold)),
               ),
             ],
           );
@@ -74,7 +74,7 @@ class InvoicePdfGenerator {
     );
 
     // Save PDF and open it
-    await savePdfAndOpen(pdf,invoice.invoiceNumber);
+    await savePdfAndOpen(pdf,estimate.estimateNumber);
   }
 
   pw.Widget _buildCompanyInfo(pw.Font bold, pw.Font regular) {
@@ -98,11 +98,9 @@ class InvoicePdfGenerator {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text('Invoice To:', style: pw.TextStyle(fontSize: 18, font: bold)),
-        pw.Text(invoice.clientName.name, style: pw.TextStyle(font: regular)),
-        pw.Text(invoice.clientName.address, style: pw.TextStyle(font: regular)),
-        pw.Text('Phone: ${invoice.clientName.phone}', style: pw.TextStyle(font: regular)),
-        pw.Text('Email: ${invoice.clientName.email}', style: pw.TextStyle(font: regular)),
+        pw.Text('Estimate To:', style: pw.TextStyle(fontSize: 18, font: bold)),
+        pw.Text("Client", style: pw.TextStyle(font: regular)),
+       
       ],
     );
   }
@@ -111,10 +109,10 @@ class InvoicePdfGenerator {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text('Invoice #: ${invoice.invoiceNumber}', style: pw.TextStyle(font: regular)),
-        pw.Text('Invoice Date: ${invoice.invoiceDate.split("T")[0]}', style: pw.TextStyle(font: regular)),
-        pw.Text('Due Date: ${invoice.invoiceDue.split("T")[0]}', style: pw.TextStyle(font: regular)),
-        pw.Text('Note: ${invoice.note.isEmpty?"No description":invoice.note}', style: pw.TextStyle(font: regular)),
+        pw.Text('Estimate #: ${estimate.estimateNumber}', style: pw.TextStyle(font: regular)),
+        pw.Text('Estimate Date: ${estimate.estimateDate.split("T")[0]}', style: pw.TextStyle(font: regular)),
+        pw.Text('Due Date: ${estimate.estimateDue.split("T")[0]}', style: pw.TextStyle(font: regular)),
+        pw.Text('Note: ${estimate.note.isEmpty?"No description":estimate.note}', style: pw.TextStyle(font: regular)),
       ],
     );
   }
@@ -122,12 +120,12 @@ class InvoicePdfGenerator {
   pw.Widget _buildInvoiceItemsTable(pw.Font bold, pw.Font regular) {
     return pw.TableHelper.fromTextArray(
       headers: ['Item', 'Quantity', 'Unit Price', 'Total'],
-      data: invoice.items.map((item) {
+      data: estimate.items.map((item) {
         return [
           item.name,
           item.count.toString(),
-          '${invoice.currency.abbreviation} ${item.price}',
-          '${invoice.currency.abbreviation} ${item.count * item.price}',
+          '${estimate.currency.abbreviation} ${item.price}',
+          '${estimate.currency.abbreviation} ${item.count * item.price}',
         ];
       }).toList(),
       headerStyle: pw.TextStyle(font: bold),
@@ -147,7 +145,9 @@ class InvoicePdfGenerator {
       // Open the PDF file
       await OpenFilex.open(filePath);
     } catch (e) {
-      print('Error saving or opening PDF: $e');
+      if (kDebugMode) {
+        print('Error saving or opening PDF: $e');
+      }
     }
   }
 }

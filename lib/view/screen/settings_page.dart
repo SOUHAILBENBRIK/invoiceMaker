@@ -54,6 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: AppConstant.getHeight(context) * 0.01,
             ),
             info(context, list: AppConstant.iconsInfo),
+            
             const Spacer(
               flex: 3,
             ),

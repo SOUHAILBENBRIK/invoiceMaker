@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:hive_flutter/adapters.dart';
@@ -18,7 +19,11 @@ void main() async {
    Get.put(EstimateController());// estimate controller
    Get.put(ItemController()); // item controller 
    Get.put(ClientController()); // client controller
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

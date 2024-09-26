@@ -8,6 +8,7 @@ import 'package:quick_invoice/model/business.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/utils/constants_app.dart';
 import 'package:quick_invoice/utils/theme_app.dart';
+import 'package:quick_invoice/view/widgets/message_widget.dart';
 import 'package:quick_invoice/view/widgets/pdf_invoice_widget.dart';
 import 'package:quick_invoice/view/widgets/search_widget.dart';
 
@@ -127,9 +128,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           invoice: item,
                         );
                         await _pdfGenerator.generateInvoicePdf();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Invoice PDF generated!')),
-                        );
+                        MessageWidget.sucessMessage(title: "Pdf Generated");
                       },
                       child: Container(
                         width: AppConstant.getWidth(context) * 0.9,
