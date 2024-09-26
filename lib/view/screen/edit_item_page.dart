@@ -97,7 +97,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                           "item",
                           itemController.currentItem.value?.id ?? "",
                           item.toMap());
-                      Get.offNamed(AppRoute.itemsScreen);
+                      Get.offNamed(AppRoute.itemsScreen,arguments: {"state": 0});
                     }
                   },
                   bg: Colors.black,

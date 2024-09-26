@@ -29,6 +29,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,15 +107,15 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
               return Visibility(
                   visible: invoiceController.currentClient.value != null &&
                       invoiceController.items.isNotEmpty &&
-                      invoiceController.duoDate.value != null && mainController.currentCountryCurrency.value != null,
+                      invoiceController.duoDate.value != null &&
+                      mainController.currentCountryCurrency.value != null,
                   child: MainButton(
                       title: "Add invoice",
                       onPressed: () async {
                         String id = AppConstant.generateRandomId(10);
                         InvoiceModel invoice = InvoiceModel(
                             id: id,
-                            clientName:
-                                invoiceController.currentClient.value!,
+                            clientName: invoiceController.currentClient.value!,
                             invoiceNumber: invoiceController.invoiceName.value,
                             discount: invoiceController.discount.value,
                             invoiceDate: invoiceController.issuedDate.value
@@ -125,11 +126,13 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                                 "",
                             total: invoiceController.total.value,
                             note: "",
-                            currency: mainController.currentCountryCurrency.value!,
+                            currency:
+                                mainController.currentCountryCurrency.value!,
                             items: invoiceController.items);
 
                         await BusinessController()
                             .addItem("invoice", id, invoice.toMap());
+                        invoiceController.restForm();
                         Get.offNamed(AppRoute.homeScreen);
                       },
                       bg: Colors.black,
@@ -169,7 +172,8 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
             Obx(() {
               return Text(
                 "${invoiceController.total.value}",
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.normal),
               );
             }),
             const SizedBox(
@@ -181,30 +185,27 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
 
   GestureDetector _currencyWidget() {
     return GestureDetector(
-            onTap: () => Get.toNamed(AppRoute.currenciesScreen,arguments : {
-              'state':1
+      onTap: () =>
+          Get.toNamed(AppRoute.currenciesScreen, arguments: {'state': 1}),
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8)),
+        child: Row(
+          children: [
+            Obx(() {
+              return Text(
+                mainController.currentCountryCurrency.value?.abbreviation ?? "",
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.normal),
+              );
             }),
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8)),
-              child: Row(
-                children: [
-                  Obx(
-                    () {
-                      return Text(
-                        mainController.currentCountryCurrency.value?.abbreviation??"",
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.normal),
-                      );
-                    }
-                  ),
-                  const Icon(Icons.arrow_drop_down)
-                ],
-              ),
-            ),
-          );
+            const Icon(Icons.arrow_drop_down)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget checkedName(BuildContext context,
@@ -448,7 +449,9 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
   discount(BuildContext context, InvoiceController invoiceController) {
     return GestureDetector(
       onTap: () {
-        Get.bottomSheet(const DiscountPage(state: 1,));
+        Get.bottomSheet(const DiscountPage(
+          state: 1,
+        ));
       },
       child: Container(
           width: AppConstant.getWidth(context) * 0.9,
@@ -470,7 +473,8 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
               Obx(() {
                 return Text(
                   "${invoiceController.discount.value}%",
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.normal),
                 );
               }),
               const SizedBox(

@@ -89,7 +89,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
                           .addItem("client", id, client.toMap());
                       var arguments = Get.arguments;
                       int state = arguments['state'] as int;
-                      Get.offNamed(AppRoute.clientScreen,
+                      Get.offAllNamed(AppRoute.clientScreen,
                           arguments: {"state": state});
                     }
                   },

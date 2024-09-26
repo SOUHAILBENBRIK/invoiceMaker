@@ -90,7 +90,7 @@ class _NewItemScreenState extends State<NewItemScreen> {
 
                       await BusinessController()
                           .addItem("item", id, item.toMap());
-                      Get.offNamed(AppRoute.itemsScreen, arguments: {
+                      Get.offAllNamed(AppRoute.itemsScreen, arguments: {
                         "state": state,
                       });
                     }

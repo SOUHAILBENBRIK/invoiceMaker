@@ -25,10 +25,12 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
   final MainController mainController = Get.find<MainController>();
   @override
   void initState() {
+    super.initState();
     final estimates = BusinessController().getAllItems("estimate");
     estimateController.changeEstimateName("ES0${estimates.length + 1}");
-    super.initState();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +49,17 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: Column(
           children: [
-            Text("New Estimate", style: Theme.of(context).textTheme.bodyLarge),
+            Text("New Estimate",
+                style: Theme.of(context).textTheme.bodyLarge),
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
             Obx(() {
               return Visibility(
-                visible: estimateController.items.isNotEmpty ,
+                visible: estimateController.items.isNotEmpty,
                 child: _topPart(context, controller: estimateController),
               );
             }),
-           
             SizedBox(
               height: AppConstant.getHeight(context) * 0.02,
             ),
@@ -70,7 +72,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
                     title: "Item",
                     onPressed: () =>
                         Get.toNamed(AppRoute.itemsScreen, arguments: {
-                          "state": 2,// new estimate
+                          "state": 2, // new estimate
                         }),
                     icon: Icons.format_list_bulleted_add),
               );
@@ -93,18 +95,19 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
             ),
             Obx(() {
               return Visibility(
-                  visible:
-                      estimateController.items.isNotEmpty &&
+                  visible: estimateController.items.isNotEmpty &&
                       estimateController.duoDate.value != null &&
-                      mainController.currentCountryCurrency .value != null,
+                      mainController.currentCountryCurrency.value != null,
                   child: MainButton(
                       title: "Add estimate",
                       onPressed: () async {
                         String id = AppConstant.generateRandomId(10);
                         EstimateModel estimate = EstimateModel(
                             id: id,
-                            currency: mainController.currentCountryCurrency.value!,
-                            estimateNumber: estimateController.estimateName.value,
+                            currency:
+                                mainController.currentCountryCurrency.value!,
+                            estimateNumber:
+                                estimateController.estimateName.value,
                             discount: estimateController.discount.value,
                             estimateDate: estimateController.issuedDate.value
                                     ?.toIso8601String() ??
@@ -115,9 +118,10 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
                             total: estimateController.total.value,
                             note: "",
                             items: estimateController.items);
-
+      
                         await BusinessController()
                             .addItem("estimate", id, estimate.toMap());
+                        estimateController.restForm();
                         Get.offNamed(AppRoute.homeScreen);
                       },
                       bg: Colors.black,
@@ -157,7 +161,8 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
             Obx(() {
               return Text(
                 "${estimateController.total.value}",
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.normal),
               );
             }),
             const SizedBox(
@@ -169,33 +174,28 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
 
   GestureDetector _currencyWidget() {
     return GestureDetector(
-            onTap: () => Get.toNamed(AppRoute.currenciesScreen,arguments : {
-              'state':2
+      onTap: () =>
+          Get.toNamed(AppRoute.currenciesScreen, arguments: {'state': 2}),
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8)),
+        child: Row(
+          children: [
+            Obx(() {
+              return Text(
+                mainController.currentCountryCurrency.value!.abbreviation,
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.normal),
+              );
             }),
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8)),
-              child:  Row(
-                children: [
-                  Obx(
-                    () {
-                      return Text(
-                        mainController.currentCountryCurrency.value!.abbreviation,
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.normal),
-                      );
-                    }
-                  ),
-                  const Icon(Icons.arrow_drop_down)
-                ],
-              ),
-            ),
-          );
+            const Icon(Icons.arrow_drop_down)
+          ],
+        ),
+      ),
+    );
   }
-
- 
 
   _listOfItem(BuildContext context, {required EstimateController controller}) {
     return SizedBox(
@@ -417,7 +417,9 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
   discount(BuildContext context, EstimateController estimateController) {
     return GestureDetector(
       onTap: () {
-        Get.bottomSheet(const DiscountPage(state: 2,));
+        Get.bottomSheet(const DiscountPage(
+          state: 2,
+        ));
       },
       child: Container(
           width: AppConstant.getWidth(context) * 0.9,
@@ -439,7 +441,8 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
               Obx(() {
                 return Text(
                   "${estimateController.discount.value}%",
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.normal),
                 );
               }),
               const SizedBox(

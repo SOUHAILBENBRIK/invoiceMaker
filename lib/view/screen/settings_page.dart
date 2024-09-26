@@ -54,7 +54,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: AppConstant.getHeight(context) * 0.01,
             ),
             info(context, list: AppConstant.iconsInfo),
-            
             const Spacer(
               flex: 3,
             ),
@@ -156,14 +155,62 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         child: Column(
           children: [
-            ...list.map((val) {
-              return buttonParameter(context, val, onTap: () {
-                Uri url = Uri.parse("https://flowcv.me/souhailbenbrik");
-                _launchUrl(url);
-              });
-            })
+            buttonParameter(context, list[0], onTap: () {
+              Uri url = Uri.parse("https://flowcv.me/souhailbenbrik");
+              _launchUrl(url);
+            }),
+            buttonParameter(context, list[1], onTap: () {
+              _showDeleteAccountDialog(context);
+            }),
           ],
         ));
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text("Delete Account"),
+          content: Text(
+              "Are you sure you want to delete your account? This action cannot be undone."),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                Get.back(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () {
+                _deleteAccount();
+                Navigator.of(context).pop(); // Close the dialog after deletion
+              },
+              style: TextButton.styleFrom(
+                foregroundColor:
+                    Colors.red, // Change button color to indicate danger
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function that contains the account deletion logic
+  Future<void> _deleteAccount() async {
+    Get.back();
+    await BusinessController().clearBox('business');
+    await BusinessController().clearBox('invoice');
+    await BusinessController().clearBox('client');
+   await  BusinessController().clearBox('item');
+    await BusinessController().clearBox('estimate');
+    Get.offAllNamed(AppRoute.splashScreen);
   }
 
   Future<void> _launchUrl(Uri url) async {

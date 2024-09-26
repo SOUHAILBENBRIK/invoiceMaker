@@ -39,6 +39,10 @@ class AppConstant {
         icon: Icons.email,
         name: "Talk with developper",
         path: AppRoute.homeScreen),
+    IconParameters(
+        icon: Icons.delete,
+        name: "Delete account",
+        path: AppRoute.introScreen),
   ];
 
   static double getHeight(BuildContext context) {

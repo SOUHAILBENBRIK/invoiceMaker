@@ -188,7 +188,7 @@ class _ItemScreenState extends State<ItemScreen> {
                             break;
                           default:
                             itemController.onChangeCurrentItem(item);
-                            Get.toNamed(AppRoute.editItemScreen);
+                            Get.toNamed(AppRoute.editItemScreen,arguments: {"state": 0});
                             break;
                         }
                       },

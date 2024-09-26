@@ -1,11 +1,9 @@
-
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:quick_invoice/model/invoice.dart';
 import 'package:quick_invoice/model/item.dart';
 
 class EstimateController extends GetxController {
-
   RxList<ItemInvoice> items = <ItemInvoice>[].obs;
   Rx<DateTime?> duoDate = Rx<DateTime?>(null);
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
@@ -20,12 +18,14 @@ class EstimateController extends GetxController {
     isTaxable.value = !isTaxable.value;
   }
 
-  void changeEstimateName (String val){
+  void changeEstimateName(String val) {
     estimateName.value = val;
   }
-  void clearTotla(){
+
+  void clearTotla() {
     total.value = 0.0;
   }
+
   void changeTotal({required int number, required double price}) {
     total.value = total.value + number * price;
     total.value = total.value - (discount / 100) * total.value;
@@ -46,13 +46,12 @@ class EstimateController extends GetxController {
 
   void restForm() {
     items.clear();
-    
+    total.value = 0;
+    discount.value = 0; 
     currentItem.value = null;
     duoDate.value = null;
     issuedDate.value = null;
   }
-
-
 
   void onChangeCurrentItem(ItemModel val) {
     currentItem.value = val;
