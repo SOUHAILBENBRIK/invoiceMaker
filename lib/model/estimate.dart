@@ -10,7 +10,7 @@ class EstimateModel {
   final String id;
   final String estimateNumber;
   final String estimateDate;
-  final String estimateDue;
+  
   final double total;
   final String note;
   final int discount;
@@ -20,7 +20,7 @@ class EstimateModel {
     required this.id,
     required this.estimateNumber,
     required this.estimateDate,
-    required this.estimateDue,
+
     required this.total,
     required this.note,
     required this.discount,
@@ -43,7 +43,7 @@ class EstimateModel {
       id: id ?? this.id,
       estimateNumber: estimateNumber ?? this.estimateNumber,
       estimateDate: estimateDate ?? this.estimateDate,
-      estimateDue: estimateDue ?? this.estimateDue,
+  
       total: total ?? this.total,
       note: note ?? this.note,
       discount: discount ?? this.discount,
@@ -57,7 +57,7 @@ class EstimateModel {
       'id': id,
       'estimateNumber': estimateNumber,
       'estimateDate': estimateDate,
-      'estimateDue': estimateDue,
+   
       'total': total,
       'note': note,
       'discount': discount,
@@ -71,7 +71,7 @@ class EstimateModel {
       id: map['id'] as String,
       estimateNumber: map['estimateNumber'] as String,
       estimateDate: map['estimateDate'] as String,
-      estimateDue: map['estimateDue'] as String,
+   
       total: map['total'] as double,
       note: map['note'] as String,
       discount: map['discount'] as int,
@@ -94,7 +94,7 @@ class EstimateModel {
 
   @override
   String toString() {
-    return 'EstimateModel(id: $id, estimateNumber: $estimateNumber, estimateDate: $estimateDate, estimateDue: $estimateDue, total: $total, note: $note, discount: $discount, items: $items, currency: $currency)';
+    return 'EstimateModel(id: $id, estimateNumber: $estimateNumber, estimateDate: $estimateDate, total: $total, note: $note, discount: $discount, items: $items, currency: $currency)';
   }
 
   @override
@@ -104,7 +104,6 @@ class EstimateModel {
     return other.id == id &&
         other.estimateNumber == estimateNumber &&
         other.estimateDate == estimateDate &&
-        other.estimateDue == estimateDue &&
         other.total == total &&
         other.note == note &&
         other.discount == discount &&
@@ -117,7 +116,7 @@ class EstimateModel {
     return id.hashCode ^
         estimateNumber.hashCode ^
         estimateDate.hashCode ^
-        estimateDue.hashCode ^
+      
         total.hashCode ^
         note.hashCode ^
         discount.hashCode ^

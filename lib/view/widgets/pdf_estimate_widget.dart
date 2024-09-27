@@ -111,7 +111,6 @@ class EstimatePdfGenerator {
       children: [
         pw.Text('Estimate #: ${estimate.estimateNumber}', style: pw.TextStyle(font: regular)),
         pw.Text('Estimate Date: ${estimate.estimateDate.split("T")[0]}', style: pw.TextStyle(font: regular)),
-        pw.Text('Due Date: ${estimate.estimateDue.split("T")[0]}', style: pw.TextStyle(font: regular)),
         pw.Text('Note: ${estimate.note.isEmpty?"No description":estimate.note}', style: pw.TextStyle(font: regular)),
       ],
     );

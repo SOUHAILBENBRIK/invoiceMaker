@@ -96,7 +96,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
             Obx(() {
               return Visibility(
                   visible: estimateController.items.isNotEmpty &&
-                      estimateController.duoDate.value != null &&
+                      estimateController.issuedDate.value != null &&
                       mainController.currentCountryCurrency.value != null,
                   child: MainButton(
                       title: "Add estimate",
@@ -112,9 +112,8 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
                             estimateDate: estimateController.issuedDate.value
                                     ?.toIso8601String() ??
                                 "",
-                            estimateDue: estimateController.duoDate.value
-                                    ?.toIso8601String() ??
-                                "",
+                            
+                              
                             total: estimateController.total.value,
                             note: "",
                             items: estimateController.items);
@@ -288,44 +287,7 @@ class _NewEstimateScreenState extends State<NewEstimateScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () async {
-              final today = DateTime.now();
-              final date = await showDatePickerDialog(
-                context: context,
-                initialDate: DateTime(today.year, today.month, today.day),
-                minDate: DateTime(2020, 1, 1),
-                maxDate: DateTime(today.year + 2, today.month, today.day),
-                width: AppConstant.getWidth(context) * 0.9,
-                height: AppConstant.getHeight(context) * 0.4,
-                currentDate: DateTime(today.year, today.month, today.day),
-                selectedDate: DateTime(today.year, today.month, today.day),
-                currentDateDecoration: const BoxDecoration(),
-                currentDateTextStyle: const TextStyle(),
-                daysOfTheWeekTextStyle: const TextStyle(),
-                disabledCellsTextStyle: const TextStyle(),
-                enabledCellsDecoration: const BoxDecoration(),
-                enabledCellsTextStyle: const TextStyle(),
-                initialPickerType: PickerType.days,
-                selectedCellDecoration: const BoxDecoration(),
-                selectedCellTextStyle: const TextStyle(),
-                leadingDateTextStyle: const TextStyle(),
-                slidersColor: Colors.black,
-                highlightColor: Colors.black.withOpacity(0.3),
-                slidersSize: 20,
-                splashColor: Colors.black.withOpacity(0.3),
-                splashRadius: 40,
-                centerLeadingDate: true,
-              );
-              if (date != null) {
-                controller.addDuoDate(date);
-              }
-            },
-            child: _iconButton(context, controller,
-                text: "No duo date",
-                icon: Icons.date_range,
-                date: controller.duoDate.value),
-          ),
+          
           GestureDetector(
             onTap: () async {
               final today = DateTime.now();

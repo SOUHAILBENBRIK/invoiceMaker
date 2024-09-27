@@ -108,6 +108,7 @@ class _NewInvoiceScreenState extends State<NewInvoiceScreen> {
                   visible: invoiceController.currentClient.value != null &&
                       invoiceController.items.isNotEmpty &&
                       invoiceController.duoDate.value != null &&
+                      invoiceController.issuedDate.value != null &&
                       mainController.currentCountryCurrency.value != null,
                   child: MainButton(
                       title: "Add invoice",

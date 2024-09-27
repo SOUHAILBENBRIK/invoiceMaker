@@ -5,7 +5,7 @@ import 'package:quick_invoice/model/item.dart';
 
 class EstimateController extends GetxController {
   RxList<ItemInvoice> items = <ItemInvoice>[].obs;
-  Rx<DateTime?> duoDate = Rx<DateTime?>(null);
+  
   Rx<DateTime?> issuedDate = Rx<DateTime?>(null);
   RxDouble total = 0.0.obs;
   RxInt discount = 0.obs;
@@ -36,9 +36,7 @@ class EstimateController extends GetxController {
     total.value = total.value - discount / 100 * total.value;
   }
 
-  void addDuoDate(DateTime val) {
-    duoDate.value = val;
-  }
+ 
 
   void addIssuedDate(DateTime val) {
     issuedDate.value = val;
@@ -49,7 +47,6 @@ class EstimateController extends GetxController {
     total.value = 0;
     discount.value = 0; 
     currentItem.value = null;
-    duoDate.value = null;
     issuedDate.value = null;
   }
 
