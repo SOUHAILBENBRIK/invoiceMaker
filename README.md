@@ -1,16 +1,33 @@
 # quick_invoice
 
-A new Flutter project.
 
-## Getting Started
+A **Flutter** mobile application for creating invoices and estimates, with PDF generation support. The app is built using **Hiver** as a local database and **GetX** for state management, ensuring a smooth and responsive user experience.
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
+- Create and manage invoices and estimates.
+- Generate **PDF** versions of invoices and estimates.
+- Store data locally using **Hiver** database.
+- Efficient **state management** with **GetX**.
+- Fully **responsive** design for different screen sizes.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Tech Stack
+- **Framework:** Flutter
+- **State Management:** GetX
+- **Local Database:** Hiver
+- **PDF Generation:** Flutter PDF
+- **UI Design:** Material Design
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 📸 Screenshots
+_Add screenshots of your app here_
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Installation
+
+# Clone the repository
+git clone https://github.com/yourusername/invoice-estimate-app.git
+cd invoice-estimate-app
+
+# Install dependencies
+flutter pub get
+
+# Run the application
+flutter run
