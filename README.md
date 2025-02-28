@@ -60,8 +60,8 @@ A **Flutter** mobile application for creating invoices and estimates, with PDF g
 ## 📦 Installation
 
 # Clone the repository
-git clone https://github.com/yourusername/invoice-estimate-app.git
-cd invoice-estimate-app
+git clone https://github.com/SOUHAILBENBRIK/invoiceMaker.git
+cd invoiceMaker
 
 # Install dependencies
 flutter pub get
