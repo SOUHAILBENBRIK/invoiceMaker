@@ -18,26 +18,42 @@ A **Flutter** mobile application for creating invoices and estimates, with PDF g
 - **UI Design:** Material Design
 
 ## 📸 Screenshots
-### Create Business 
-![Create Business](assets/screenshots/5.jpeg)
 
-### New Invoice 
-![New Invoice ](assets/screenshots/3.jpeg)
+## 📸 Screenshots
 
-### New Estimate
-![New Estiamte ](assets/screenshots/2.jpeg)
+<table>
+  <tr>
+    <td align="center"><b>Create Business</b></td>
+    <td align="center"><b>New Invoice</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/5.jpeg" width="300"></td>
+    <td><img src="assets/screenshots/3.jpeg" width="300"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>New Estimate</b></td>
+    <td align="center"><b>Items Page</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/2.jpeg" width="300"></td>
+    <td><img src="assets/screenshots/4.jpeg" width="300"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Client Page</b></td>
+    <td align="center"><b>Profile Page</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/7.jpeg" width="300"></td>
+    <td><img src="assets/screenshots/6.jpeg" width="300"></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><b>Generated PDF</b></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="assets/screenshots/1.jpeg" width="300"></td>
+  </tr>
+</table>
 
-### Items Page
-![Items Page ](assets/screenshots/4.jpeg)
-
-### Client Page
-![Client Page ](assets/screenshots/7.jpeg)
-
-### Profile Page
-![Profile Page ](assets/screenshots/6.jpeg)
-
-### Generated Pdf
-![Generated Pdf ](assets/screenshots/1.jpeg)
 
 
 
